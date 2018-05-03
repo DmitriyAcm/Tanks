@@ -18,6 +18,20 @@ public abstract class Bullet extends DynamicObject {
     {
         super(dir,field);
         _LenghtFlight = lenFly;
+        
+        ArrayList<Vector> list = traectory();
+        
+        for(Vector cur : list)
+        {
+            Direction dir1 = cur.next();
+            while(dir1 != null)
+            {
+                super.moveTo(dir1);
+                dir1 = cur.next();
+            }
+        }
+        
+        // TODO Ударная волна
     }
     
     public abstract ArrayList<Vector> traectory();

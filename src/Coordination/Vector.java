@@ -25,7 +25,7 @@ public class Vector {
         _lenght = (int)1e9;
     }
     
-    Direction next()
+    public Direction next()
     {
         if(_lenght>0)
         {
