@@ -27,6 +27,13 @@ abstract public class DynamicObject extends Object{
     
     boolean moveTo(Direction dir)
     {
+        _direct = dir;
+        
+        ///////// --- Обработка через поле
+        // Запросить клетку где находится объект
+        // Удалить объект из клетки
+        // Переместить объект на клетку
+        
         return true;
     }
 }
