@@ -86,4 +86,25 @@ public class GameField {
         
         return false;
     }
+    
+    public Cell GetCell(int X, int Y)
+    {
+        if(X>=_width || Y>=_height)
+        {
+            return null;
+        }
+        
+        Cell curCell = _LeftUpCell;
+        while(X-->0)
+        {
+            curCell = curCell.nextCell(Direction.Right());
+        }
+        
+        while(Y-->0)
+        {
+            curCell = curCell.nextCell(Direction.Down());
+        }
+        
+        return curCell;
+    }
 }
