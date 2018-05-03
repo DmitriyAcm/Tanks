@@ -81,6 +81,7 @@ public class Cell {
     
     void DamageCell()
     {
-        
+        _AirObj.DamageObject();
+        _GroundObj.DamageObject();
     }
 }
