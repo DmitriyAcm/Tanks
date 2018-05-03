@@ -27,6 +27,7 @@ abstract public class Object {
         return _PointsHealth <= 0;
     }
     
-    abstract boolean airBlocks();
-    abstract boolean earthBlocks();      
+    abstract void DamageObject();
+    abstract boolean AirBlocks();
+    abstract boolean GroundBlocks();      
 }

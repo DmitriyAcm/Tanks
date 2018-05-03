@@ -11,35 +11,42 @@ package Coordination;
  */
 public class Direction {
     
-    int dir;
+    public static final int NUMDIRECT = 4;
+    
+    private int _dir;
     
     private Direction(int curDir)
     {
-        dir = curDir;
+        _dir = curDir;
     }
     
-    static Direction Up()
+    public static Direction Up()
     {
         return new Direction(0);
     }
     
-    static Direction Right()
+    public static Direction Right()
     {
         return new Direction(1);
     }
     
-    static Direction Down()
+    public static Direction Down()
     {
         return new Direction(2);
     }
     
-    static Direction Left()
+    public static Direction Left()
     {
         return new Direction(3);
     }
     
-    Direction Rotate(Rotation rot)
+    public Direction Rotate(Rotation rot)
     {
-        return new Direction((dir+rot.DirRotate()+4)%4);
+        return new Direction((_dir+rot.DirRotate()+4)%4);
+    }
+    
+    public int direct()
+    {
+        return _dir;
     }
 }
