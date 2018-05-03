@@ -42,7 +42,7 @@ public class Direction {
     
     public Direction Rotate(Rotation rot)
     {
-        return new Direction((_dir+rot.DirRotate()+4)%4);
+        return new Direction((_dir+rot.DirRotate()+NUMDIRECT)%NUMDIRECT);
     }
     
     public int direct()
