@@ -10,7 +10,7 @@ package tanksgames;
  * @author dmitr
  */
 abstract public class Object {
-    int _PointsHealth;
+    protected int _PointsHealth;
     
     Object()
     {
