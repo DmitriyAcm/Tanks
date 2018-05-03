@@ -13,13 +13,13 @@ public class Vector {
     private Direction _dir;
     private int _lenght;
     
-    Vector(Direction dir, int len)
+    public Vector(Direction dir, int len)
     {
         _dir = dir;
         _lenght = len;
     }
     
-    Vector(Direction dir)
+    public Vector(Direction dir)
     {
         _dir = dir;
         _lenght = (int)1e9;

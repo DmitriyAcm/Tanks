@@ -11,7 +11,7 @@ import Coordination.Direction;
  * @author dmitr
  */
 abstract public class DynamicObject extends Object{
-    private Direction _direct;
+    protected Direction _direct;
     
     GameField _field; 
     
