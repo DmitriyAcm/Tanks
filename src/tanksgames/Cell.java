@@ -14,7 +14,7 @@ public class Cell {
     Object _AirObj;
     Object _GroundObj;
     
-    Cell[] _NearbyCell = new Cell[Direction.NUMDIRECT];
+    private final Cell[] _NearbyCell = new Cell[Direction.NUMDIRECT];
     
     Cell(Cell left, Cell up)
     {
@@ -25,6 +25,11 @@ public class Cell {
     void SetCell(Cell cell, Direction direct)
     {
         _NearbyCell[direct.direct()] = cell;
+    }
+    
+    Cell nextCell(Direction dir)
+    {
+        return _NearbyCell[dir.direct()];
     }
     
     boolean AddObject(Object obj)
