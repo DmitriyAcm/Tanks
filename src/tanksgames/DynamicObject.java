@@ -13,27 +13,25 @@ import Coordination.Direction;
 abstract public class DynamicObject extends Object{
     private Direction _direct;
     
-    DynamicObject(Direction dir)
+    GameField _field; 
+    
+    DynamicObject(Direction dir, GameField field)
     {
         super();
         _direct = dir;
+        _field = field;
     }
     
-    DynamicObject(Direction dir, int PointHealth)
+    DynamicObject(Direction dir, int PointHealth, GameField field)
     {
         super(PointHealth);
         _direct = dir;
+        _field = field;
     }
     
     boolean moveTo(Direction dir)
     {
-        _direct = dir;
-        
-        ///////// --- Обработка через поле
-        // Запросить клетку где находится объект
-        // Удалить объект из клетки
-        // Переместить объект на клетку
-        
-        return true;
+        _direct = dir; 
+        return _field.moveObjectTo(this, dir);
     }
 }
