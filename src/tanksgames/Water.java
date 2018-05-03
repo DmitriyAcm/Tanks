@@ -9,19 +9,16 @@ package tanksgames;
  *
  * @author dmitr
  */
-public class Headquarters extends Object {
-    int _color;
-    
-    public Headquarters(int col)
+public class Water extends Object{
+    public Water()
     {
-        super(2);
-        _color = col;
+        super();
     }
     
     @Override
     public boolean AirBlocks()
     {
-        return true;
+        return false;
     }
     
     @Override
@@ -33,6 +30,6 @@ public class Headquarters extends Object {
     @Override
     public void DamageObject()
     {
-        super._PointsHealth--;
+
     }
 }

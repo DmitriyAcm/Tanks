@@ -4,18 +4,15 @@
  * and open the template in the editor.
  */
 package tanksgames;
-
+import java.util.Random;
 /**
  *
  * @author dmitr
  */
-public class Headquarters extends Object {
-    int _color;
-    
-    public Headquarters(int col)
+public class Wall extends Object{
+    public Wall()
     {
-        super(2);
-        _color = col;
+        super((new java.util.Random().nextInt(3))+1);
     }
     
     @Override
