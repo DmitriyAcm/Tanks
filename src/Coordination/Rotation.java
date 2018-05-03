@@ -10,7 +10,7 @@ package Coordination;
  * @author dmitr
  */
 public class Rotation {
-    int _Rot;
+    private int _Rot;
     private Rotation(int Rot)
     {
         _Rot = Rot;
@@ -24,5 +24,10 @@ public class Rotation {
     public static Rotation Right()
     {
         return new Rotation(1);
+    }
+    
+    public int DirRotate()
+    {
+        return _Rot;
     }
 }
