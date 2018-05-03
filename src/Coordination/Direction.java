@@ -42,5 +42,4 @@ public class Direction {
     {
         return new Direction((dir+rot.DirRotate()+4)%4);
     }
-    
 }
