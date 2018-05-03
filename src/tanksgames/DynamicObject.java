@@ -31,7 +31,7 @@ abstract public class DynamicObject extends Object{
     
     boolean moveTo(Direction dir)
     {
-        _direct = dir; 
+        _direct = dir;
         return _field.moveObjectTo(this, dir);
     }
 }
