@@ -32,8 +32,18 @@ public class Cell {
         return _NearbyCell[dir.direct()];
     }
     
+    boolean CheckObject(Object obj)
+    {
+        return _AirObj == obj || _GroundObj == obj;
+    }
+    
     boolean AddObject(Object obj)
     {
+        if(obj==null)
+        {
+            throw new NullPointerException("Object for add non valid");
+        }
+        
         if(obj.AirBlocks() && obj.GroundBlocks())
         {
             if(_AirObj == null && _GroundObj == null)
