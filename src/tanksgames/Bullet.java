@@ -13,13 +13,23 @@ import Coordination.*;
  */
 public abstract class Bullet extends DynamicObject {
     protected int _LenghtFlight;
+    private final int _Radius;
     
     Bullet(Direction dir, int lenFly, GameField field, int radius)
     {
         super(dir,field);
         _LenghtFlight = lenFly;
-        
+        _Radius = radius; 
+    }
+    
+    public void Fire()
+    {
         ArrayList<Vector> list = traectory();
+        
+        if(list.isEmpty())
+        {
+            throw new NullPointerException("Запуск снаряда по несуществующему пути");
+        }
         
         for(Vector cur : list)
         {
@@ -31,7 +41,7 @@ public abstract class Bullet extends DynamicObject {
             }
         }
         
-        new ShockWave(field.FindCell(this), radius);
+        new ShockWave(_field.FindCell(this), _Radius);
     }
     
     public abstract ArrayList<Vector> traectory();

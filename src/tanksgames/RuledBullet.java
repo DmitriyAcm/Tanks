@@ -20,11 +20,11 @@ import java.util.TreeMap;
 public class RuledBullet extends Bullet{
     Cell _base,_to;
     
-    RuledBullet(Direction dir, int Lenght,GameField field, Cell from, Cell to)
+    RuledBullet(Direction dir, int Lenght,GameField field, Cell to)
     {
         super(dir,Lenght,field,2);
-        _base = from;
         _to = to;
+        _base = _field.FindCell(this);
     }
     
     @Override
@@ -58,7 +58,7 @@ public class RuledBullet extends Bullet{
             {
                 Cell newCell = curCell.nextCell(curDir);
                 
-                if(mp.get(newCell)==null)
+                if(newCell._AirObj == null && mp.get(newCell)==null)
                 {
                     q.add(newCell);
                     mp.put(newCell, Integer.toString(curDist+1));
