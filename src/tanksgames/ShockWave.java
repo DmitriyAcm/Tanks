@@ -29,7 +29,7 @@ public class ShockWave {
         while(!q.isEmpty())
         {
             Cell curCell = q.pop();
-            int curDist = (int)mp.get(curCell);
+            int curDist = Integer.parseInt((String)mp.get(curCell));
             
             if(curDist>=Radius)
             {
@@ -44,7 +44,7 @@ public class ShockWave {
                 if(mp.get(newCell)==null)
                 {
                     q.add(newCell);
-                    mp.put(newCell, curDist+1);
+                    mp.put(newCell, Integer.toString(curDist+1));
                     newCell.DamageCell();
                 }
                 

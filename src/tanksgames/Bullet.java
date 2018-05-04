@@ -12,9 +12,9 @@ import Coordination.*;
  * @author dmitr
  */
 public abstract class Bullet extends DynamicObject {
-    private int _LenghtFlight;
+    protected int _LenghtFlight;
     
-    Bullet(Direction dir, int lenFly, GameField field)
+    Bullet(Direction dir, int lenFly, GameField field, int radius)
     {
         super(dir,field);
         _LenghtFlight = lenFly;
@@ -31,7 +31,7 @@ public abstract class Bullet extends DynamicObject {
             }
         }
         
-        // TODO Ударная волна
+        new ShockWave(field.FindCell(this), radius);
     }
     
     public abstract ArrayList<Vector> traectory();

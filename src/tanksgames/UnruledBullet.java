@@ -16,7 +16,7 @@ public class UnruledBullet extends Bullet{
     
     UnruledBullet(Direction dir, GameField field)
     {
-        super(dir,(int)1e9,field);
+        super(dir,(int)1e9,field,1);
     }
     
     @Override
