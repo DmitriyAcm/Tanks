@@ -81,23 +81,23 @@ public class RuledBullet extends Bullet{
         {
             while(curCell != _base)
             {
-            Direction curDir = Direction.Up();
-            do
-            {
-                Cell newCell = curCell.nextCell(curDir);
-                
-                String curDist = (String)mp.get(newCell);
-                
-                if(curDist!= null && Integer.parseInt(curDist)+1 == Integer.parseInt((String)mp.get(curCell)))
-                {       
-                    list.add(new Vector(curDir,1));
-                    curCell = newCell;
-                    break;
+                Direction curDir = Direction.Up();
+                do
+                {
+                    Cell newCell = curCell.nextCell(curDir);
+
+                    String curDist = (String)mp.get(newCell);
+
+                    if(curDist!= null && Integer.parseInt(curDist)+1 == Integer.parseInt((String)mp.get(curCell)))
+                    {       
+                        list.add(new Vector(curDir,1));
+                        curCell = newCell;
+                        break;
+                    }
+
+                    curDir = curDir.Rotate(Rotation.Right());
                 }
-                
-                curDir = curDir.Rotate(Rotation.Right());
-            }
-            while(curDir.direct()!=Direction.Up().direct());
+                while(curDir.direct()!=Direction.Up().direct());
             }
         }
         
