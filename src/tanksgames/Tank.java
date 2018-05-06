@@ -5,6 +5,7 @@
  */
 package tanksgames;
 import Coordination.*;
+import wiew.Color;
 
 /**
  *
@@ -12,10 +13,10 @@ import Coordination.*;
  */
 public class Tank extends DynamicObject{
     
-    private int _color;
+    private Color _color;
     private int _cooldown = 0;
     
-    public Tank(Direction dir, GameField field, int color)
+    public Tank(Direction dir, GameField field, Color color)
     {
         super(dir,field);
         

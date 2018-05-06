@@ -12,6 +12,8 @@ package Coordination;
 public class Direction {
     
     public static final int NUMDIRECT = 4;
+    public final static int[] x = {0,1,0,-1};
+    public final static int[] y = {1,0,-1,0};
     
     private int _dir;
     

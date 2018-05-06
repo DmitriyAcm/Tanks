@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 package tanksgames;
-import Coordination.Color;
+import wiew.Color;
 
 /**
  *
  * @author dmitr
  */
 public class Player {
-    int _PointStep;
-    Color _color;
-    Tank tank;
-    
+    public int _PointStep;
+    private Color _color;
+    public Tank _tank;
+    public Headquarters _head;
     
     Player(Color color, int hp)
     {
