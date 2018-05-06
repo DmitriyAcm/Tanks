@@ -58,7 +58,7 @@ public class RuledBullet extends Bullet{
             {
                 Cell newCell = curCell.nextCell(curDir);
                 
-                if(newCell._AirObj == null && mp.get(newCell)==null)
+                if(newCell == _to || newCell._AirObj == null && mp.get(newCell)==null)
                 {
                     q.add(newCell);
                     mp.put(newCell, Integer.toString(curDist+1));

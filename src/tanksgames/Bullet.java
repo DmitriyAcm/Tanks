@@ -36,7 +36,10 @@ public abstract class Bullet extends DynamicObject {
             Direction dir1 = cur.next();
             while(dir1 != null)
             {
-                super.moveTo(dir1);
+                if(!super.moveTo(dir1))
+                {
+                    break;
+                }
                 dir1 = cur.next();
             }
         }
