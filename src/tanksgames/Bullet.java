@@ -31,6 +31,8 @@ public abstract class Bullet extends DynamicObject {
             throw new NullPointerException("Запуск снаряда по несуществующему пути");
         }
         
+        Cell position=null;
+        
         for(Vector cur : list)
         {
             Direction dir1 = cur.next();
@@ -38,13 +40,19 @@ public abstract class Bullet extends DynamicObject {
             {
                 if(!super.moveTo(dir1))
                 {
+                    position=_field.FindCell(this).nextCell(dir1);
                     break;
                 }
                 dir1 = cur.next();
             }
         }
         
-        new ShockWave(_field.FindCell(this), _Radius);
+        if(position == null)
+        {
+            position = _field.FindCell(this);
+        }
+        
+        new ShockWave(position, _Radius);
     }
     
     public abstract ArrayList<Vector> traectory();
