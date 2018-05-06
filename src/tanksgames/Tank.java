@@ -27,9 +27,10 @@ public class Tank extends DynamicObject{
         return _cooldown>0;
     }
     
-    public void Rotate(Rotation rot)
+    public boolean Rotate(Rotation rot)
     {
         super._direct=super._direct.Rotate(rot);
+        return true;
     }
     
     public boolean Move()
