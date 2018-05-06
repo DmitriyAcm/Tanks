@@ -7,12 +7,40 @@ package tanksgames;
 import java.util.TreeMap;
 import java.util.LinkedList;
 import Coordination.*;
+import Listeners.*;
+import java.util.ArrayList;
+
 
 /**
  *
  * @author dmitr
  */
 public class ShockWave {
+    
+    static private ArrayList<ShockWaveListener> _listeners = new ArrayList<ShockWaveListener>();
+    
+    // -- обработка слушателей
+    public static void AddListener(ShockWaveListener list)
+    {
+        _listeners.add(list);
+    }
+    
+    public static void RemoveListener(ShockWaveListener list)
+    {
+        _listeners.remove(list);
+    }
+    
+    protected void InformListener()
+    {
+        ShockWaveEvent event = new ShockWaveEvent(this);
+        for(ShockWaveListener i : _listeners)
+        {
+            i.ExplotionBullet(event);
+        }
+    }
+    
+    ////////////////////////////////////////////
+    
     
     //TODO тесты 
     ShockWave(Cell pos, int Radius)
@@ -52,6 +80,8 @@ public class ShockWave {
             }
             while(curDir.direct()!=Direction.Up().direct());
         }
+        
+        InformListener();
     }
     
 }

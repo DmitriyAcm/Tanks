@@ -79,24 +79,35 @@ public class Cell {
             throw new NullPointerException("Object for delete non valid");
         }
         
+        boolean isDelete = false;
+        
         if(_AirObj == obj)
         {
             _AirObj = null;
-            return true;
+            isDelete = true;
         }
         
         if(_GroundObj == obj)
         {
             _GroundObj = null;
-            return true;
+            isDelete = true;
         }
         
-        return false;
+        return isDelete;
     }
     
     void DamageCell()
     {
         _AirObj.DamageObject();
         _GroundObj.DamageObject();
+        
+        if(_AirObj.Destroyed())
+        {
+            _AirObj=null;
+        }
+        if(_GroundObj.Destroyed())
+        {
+            _GroundObj=null;
+        }
     }
 }
