@@ -5,7 +5,7 @@
  */
 package tanksgames;
 import Coordination.*;
-import wiew.Color;
+import view.Color;
 
 /**
  *

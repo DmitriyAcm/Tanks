@@ -5,14 +5,16 @@
  */
 package tanksgames;
 
+import view.Color;
+
 /**
  *
  * @author dmitr
  */
 public class Headquarters extends Object {
-    int _color;
+    Color _color;
     
-    public Headquarters(int col)
+    public Headquarters(Color col)
     {
         super(2);
         _color = col;

@@ -4,26 +4,44 @@
  * and open the template in the editor.
  */
 package tanksgames;
-import wiew.Color;
+import Coordination.Direction;
+import Coordination.Rotation;
+import view.Color;
 
 /**
  *
  * @author dmitr
  */
 public class Player {
-    public int _PointStep;
-    private Color _color;
-    public Tank _tank;
-    public Headquarters _head;
+    private final Color _color;
+    private final Tank _tank;
+    private final Headquarters _head;
     
-    Player(Color color, int hp)
+    Player(Color color, GameField field)
     {
         _color = color;
+        _head = new Headquarters(_color);
+        _tank = new Tank(Direction.Down(),field,_color);
         
     }
     
-    void NextStep()
+    boolean addHead(Cell pos)
     {
-        _PointStep=0;
+        if(pos.AddObject(_head))
+        {
+            Direction curDir = Direction.Up();
+            do
+            {
+                if(pos.nextCell(curDir).AddObject(_tank))
+                {
+                    break;
+                }
+                curDir = curDir.Rotate(Rotation.Right());
+            }
+            while(curDir.direct()!=Direction.Up().direct());
+            return true;
+        }
+        
+        return false;
     }
 }
