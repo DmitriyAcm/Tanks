@@ -5,6 +5,7 @@
  */
 package tanksgames;
 import Coordination.Direction;
+import Coordination.Rotation;
 /**
  *
  * @author dmitr
@@ -16,13 +17,12 @@ public class Cell {
     
     private final Cell[] _NearbyCell = new Cell[Direction.NUMDIRECT];
     
-    Cell(Cell left, Cell up)
+    Cell()
     {
-        _NearbyCell[Direction.Left().direct()] = left;
-        _NearbyCell[Direction.Up().direct()] = up;
+    
     }
     
-    void SetCell(Cell cell, Direction direct)
+    public void SetCell(Cell cell, Direction direct)
     {
         _NearbyCell[direct.direct()] = cell;
     }

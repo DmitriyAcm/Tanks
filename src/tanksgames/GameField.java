@@ -6,6 +6,8 @@
 package tanksgames;
 
 import Coordination.Direction;
+import Coordination.Rotation;
+
 
 /**
  *
@@ -15,51 +17,42 @@ public class GameField {
     int _width;
     int _height;
     
-    Cell _LeftUpCell;
+    private final Cell[][] _field;
     
-    // TODO -- тесты
     public GameField(int X, int Y)
     {
         _width = X;
         _height = Y;
         
-        _LeftUpCell = new Cell(null, null);
-        Cell prevCell = _LeftUpCell;
-        for(int i=1;i<_width;++i)
-        {
-            Cell newCell = new Cell(prevCell,null);
-            prevCell.SetCell(newCell, Direction.Right());
-            prevCell = newCell;
-        }
+        _field = new Cell[_height][_width];
         
-        Cell UpCell = _LeftUpCell;
-        for(int i=1;i<_height;++i)
+        for(int i=0;i<_height;++i)
         {
-            Cell curLeftCell = new Cell(null,UpCell);
-            Cell curUpCell = UpCell.nextCell(Direction.Right());
-            
-            for(int j=1;j<_width;++j)
+            for(int j=0;j<_width;++j)
             {
-                Cell curCell = new Cell(curLeftCell, curUpCell);
-                
-                curUpCell.SetCell(curCell, Direction.Down());
-                curLeftCell.SetCell(curCell, Direction.Right());
-                
-                curUpCell=curUpCell.nextCell(Direction.Right());
-                curLeftCell=curLeftCell.nextCell(Direction.Right());
+                int cnt = 0;
+                Direction curDir = Direction.Up();
+                do
+                {
+                    int nextDirX = j+Direction.x[cnt];
+                    int nextDirY = i+Direction.y[cnt];
+                    if(nextDirX >= 0 && nextDirX <_width && nextDirY >= 0 && nextDirY < _height)
+                    {
+                        _field[i][j].SetCell(_field[nextDirY][nextDirX], curDir);
+                    }
+                    curDir = curDir.Rotate(Rotation.Right());
+                    ++cnt;
+                }
+                while(curDir.direct()!=Direction.Up().direct());
             }
-            
-            UpCell = UpCell.nextCell(Direction.Down());
         }
     }
     
     public Cell FindCell(Object obj)
-    {
-        Cell curLeftRightCell = _LeftUpCell;
-        
-        while(curLeftRightCell != null)
+    {      
+        for(Cell[] i : _field)
         {
-            Cell curCell = curLeftRightCell;
+            Cell curCell = i[0];
             while(curCell != null)
             {
                 if(curCell.CheckObject(obj))
@@ -68,10 +61,7 @@ public class GameField {
                 }
                 curCell = curCell.nextCell(Direction.Right());
             }
-            curLeftRightCell = curLeftRightCell.nextCell(Direction.Down());
         }
-        
-        
         return null;
     }
     
@@ -93,18 +83,7 @@ public class GameField {
         {
             return null;
         }
-        
-        Cell curCell = _LeftUpCell;
-        while(X-->0)
-        {
-            curCell = curCell.nextCell(Direction.Right());
-        }
-        
-        while(Y-->0)
-        {
-            curCell = curCell.nextCell(Direction.Down());
-        }
-        
-        return curCell;
+
+        return _field[Y][X];
     }
 }
