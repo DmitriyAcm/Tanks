@@ -5,7 +5,8 @@
  */
 package tanksgames;
 import Coordination.*;
-import view.Color;
+import javax.swing.ImageIcon;
+import view.ColorObject;
 
 /**
  *
@@ -13,10 +14,10 @@ import view.Color;
  */
 public class Tank extends DynamicObject{
     
-    private Color _color;
+    private ColorObject _color;
     private int _cooldown = 0;
     
-    public Tank(Direction dir, GameField field, Color color)
+    public Tank(Direction dir, GameField field, ColorObject color)
     {
         super(dir,field);
         
@@ -69,5 +70,11 @@ public class Tank extends DynamicObject{
     public void DamageObject()
     {
         super._PointsHealth--;
+    }
+    
+    @Override
+    public ImageIcon getImage()
+    {
+        return new ImageIcon("src/tanksgames/Img/Tank/1.png");
     }
 }

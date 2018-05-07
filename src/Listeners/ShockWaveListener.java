@@ -10,5 +10,5 @@ import java.util.EventListener;
  * @author dmitr
  */
 public interface ShockWaveListener extends EventListener{
-    void ExplotionBullet(ShockWaveEvent e);
+    void ExplosiveBullet(ShockWaveEvent e);
 }

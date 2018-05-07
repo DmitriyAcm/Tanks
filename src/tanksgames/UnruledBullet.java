@@ -7,6 +7,7 @@ package tanksgames;
 
 import Coordination.*;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -27,5 +28,11 @@ public class UnruledBullet extends Bullet{
         list.add(new Vector(_direct));
         
         return list;
+    }
+    
+    @Override
+    public ImageIcon getImage()
+    {
+        return new ImageIcon("src/tanksgames/Img/UnruledBullet/2.png");
     }
 }

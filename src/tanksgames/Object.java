@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 package tanksgames;
-
+import javax.swing.ImageIcon;
 /**
  *
  * @author dmitr
  */
-abstract public class Object {
+abstract public class Object{
     protected int _PointsHealth;
+
+    public abstract ImageIcon getImage();
     
     Object()
     {

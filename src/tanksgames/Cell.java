@@ -12,8 +12,8 @@ import Coordination.Rotation;
  */
 public class Cell {
     
-    Object _AirObj;
-    Object _GroundObj;
+    public Object _AirObj;
+    public Object _GroundObj;
     
     private final Cell[] _NearbyCell = new Cell[Direction.NUMDIRECT];
     

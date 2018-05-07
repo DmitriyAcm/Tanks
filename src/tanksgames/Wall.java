@@ -5,6 +5,7 @@
  */
 package tanksgames;
 import java.util.Random;
+import javax.swing.ImageIcon;
 /**
  *
  * @author dmitr
@@ -31,5 +32,11 @@ public class Wall extends Object{
     public void DamageObject()
     {
         super._PointsHealth--;
+    }
+    
+    @Override
+    public ImageIcon getImage()
+    {
+        return new ImageIcon("src/tanksgames/Img/Wall/1.png");
     }
 }

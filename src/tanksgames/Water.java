@@ -5,6 +5,8 @@
  */
 package tanksgames;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author dmitr
@@ -31,5 +33,11 @@ public class Water extends Object{
     public void DamageObject()
     {
 
+    }
+    
+    @Override
+    public ImageIcon getImage()
+    {
+        return new ImageIcon("src/tanksgames/Img/Water/1.png");
     }
 }

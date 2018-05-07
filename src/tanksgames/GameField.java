@@ -14,8 +14,8 @@ import Coordination.Rotation;
  * @author dmitr
  */
 public class GameField {
-    int _width;
-    int _height;
+    private final int _width;
+    private final int _height;
     
     private final Cell[][] _field;
     
@@ -26,6 +26,13 @@ public class GameField {
         
         _field = new Cell[_height][_width];
         
+        for(int i=0;i<_height;++i)
+        {
+            for(int j=0;j<_width;++j)
+            {
+                _field[i][j]=new Cell();
+            }
+        }
         for(int i=0;i<_height;++i)
         {
             for(int j=0;j<_width;++j)
@@ -46,6 +53,16 @@ public class GameField {
                 while(curDir.direct()!=Direction.Up().direct());
             }
         }
+    }
+    
+    public int width()
+    {
+        return _width;
+    }
+    
+    public int height()
+    {
+        return _height;
     }
     
     public Cell FindCell(Object obj)

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.TreeMap;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -104,5 +105,11 @@ public class RuledBullet extends Bullet{
         Collections.reverse(list);
         
         return list;
+    }
+    
+    @Override
+    public ImageIcon getImage()
+    {
+        return new ImageIcon("src/tanksgames/Img/RuledBullet/1.png");
     }
 }

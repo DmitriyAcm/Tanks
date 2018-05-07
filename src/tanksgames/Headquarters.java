@@ -5,16 +5,17 @@
  */
 package tanksgames;
 
-import view.Color;
+import javax.swing.ImageIcon;
+import view.ColorObject;
 
 /**
  *
  * @author dmitr
  */
 public class Headquarters extends Object {
-    Color _color;
+    ColorObject _color;
     
-    public Headquarters(Color col)
+    public Headquarters(ColorObject col)
     {
         super(2);
         _color = col;
@@ -36,5 +37,11 @@ public class Headquarters extends Object {
     public void DamageObject()
     {
         super._PointsHealth--;
+    }
+    
+    @Override
+    public ImageIcon getImage()
+    {
+        return new ImageIcon("src/tanksgames/Img/Headquarters/2.png");
     }
 }

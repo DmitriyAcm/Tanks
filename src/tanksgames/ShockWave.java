@@ -35,7 +35,7 @@ public class ShockWave {
         ShockWaveEvent event = new ShockWaveEvent(this);
         for(ShockWaveListener i : _listeners)
         {
-            i.ExplotionBullet(event);
+            i.ExplosiveBullet(event);
         }
     }
     
