@@ -5,6 +5,7 @@
  */
 package tanksgames;
 
+import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import view.ColorObject;
 
@@ -12,8 +13,10 @@ import view.ColorObject;
  *
  * @author dmitr
  */
-public class Headquarters extends Object {
+public class Headquarters extends DestructibleObject {
     ColorObject _color;
+    
+    static String namefiles = "src/tanksgames/Img/Headquarters/1.png";
     
     public Headquarters(ColorObject col)
     {
@@ -22,26 +25,8 @@ public class Headquarters extends Object {
     }
     
     @Override
-    public boolean AirBlocks()
+    BufferedImage PaintImage()
     {
-        return true;
-    }
-    
-    @Override
-    public boolean GroundBlocks()
-    {
-        return true;
-    }
-    
-    @Override
-    public void DamageObject()
-    {
-        super._PointsHealth--;
-    }
-    
-    @Override
-    public ImageIcon getImage()
-    {
-        return new ImageIcon("src/tanksgames/Img/Headquarters/2.png");
+        return super.getImage(namefiles);
     }
 }

@@ -5,6 +5,7 @@
  */
 package tanksgames;
 import Coordination.*;
+import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import view.ColorObject;
 
@@ -13,13 +14,14 @@ import view.ColorObject;
  * @author dmitr
  */
 public class Tank extends DynamicObject{
+    static String namefiles = "src/tanksgames/Img/Tank/1.png";
     
     private ColorObject _color;
     private int _cooldown = 0;
     
     public Tank(Direction dir, GameField field, ColorObject color)
     {
-        super(dir,field);
+        super(dir,3,field);
         
         _color = color;
     }
@@ -31,12 +33,14 @@ public class Tank extends DynamicObject{
     
     public boolean Rotate(Rotation rot)
     {
+        _cooldown--;
         super._direct=super._direct.Rotate(rot);
         return true;
     }
     
     public boolean Move()
     {
+        _cooldown--;
         return super.moveTo(super._direct);
     }
     
@@ -55,26 +59,8 @@ public class Tank extends DynamicObject{
     }
     
     @Override
-    public boolean AirBlocks()
+    BufferedImage PaintImage()
     {
-        return true;
-    }
-    
-    @Override
-    public boolean GroundBlocks()
-    {
-        return true;
-    }
-    
-    @Override
-    public void DamageObject()
-    {
-        super._PointsHealth--;
-    }
-    
-    @Override
-    public ImageIcon getImage()
-    {
-        return new ImageIcon("src/tanksgames/Img/Tank/1.png");
+        return super.getImage(namefiles);
     }
 }

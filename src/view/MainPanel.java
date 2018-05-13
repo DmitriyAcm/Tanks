@@ -90,8 +90,8 @@ public class MainPanel extends JFrame {
         JPanel p = new JPanel(new SpringLayout());
         CreateSpinner(p,"Количество жизней",1);
         CreateSpinner(p,"Дальность полета управляемого снаряда",1);
-        CreateSpinner(p,"Высота поля",2);
-        CreateSpinner(p,"Ширина поля",2);
+        CreateSpinner(p,"Высота поля",3);
+        CreateSpinner(p,"Ширина поля",3);
         
         //Lay out the panel.
         int numPairs = 4;
@@ -109,7 +109,7 @@ public class MainPanel extends JFrame {
         JLabel l = new JLabel(s, JLabel.TRAILING);
         p.add(l);
         
-        SpinnerNumberModel model1 = new SpinnerNumberModel(leftbound, leftbound, 10, 1);
+        SpinnerNumberModel model1 = new SpinnerNumberModel(leftbound, leftbound, 15, 1);
         JSpinner textField = new JSpinner(model1);
         
         l.setLabelFor(textField);

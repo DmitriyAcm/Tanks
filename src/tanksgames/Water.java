@@ -5,39 +5,23 @@
  */
 package tanksgames;
 
-import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
 
 /**
  *
  * @author dmitr
  */
-public class Water extends Object{
+public class Water extends NonDestructibleObject{
+    static String namefiles = "src/tanksgames/Img/Water/1.png";
+    
+    @Override
+    BufferedImage PaintImage()
+    {
+        return super.getImage(namefiles);
+    }
+    
     public Water()
     {
         super();
-    }
-    
-    @Override
-    public boolean AirBlocks()
-    {
-        return false;
-    }
-    
-    @Override
-    public boolean GroundBlocks()
-    {
-        return true;
-    }
-    
-    @Override
-    public void DamageObject()
-    {
-
-    }
-    
-    @Override
-    public ImageIcon getImage()
-    {
-        return new ImageIcon("src/tanksgames/Img/Water/1.png");
     }
 }

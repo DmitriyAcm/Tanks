@@ -20,7 +20,7 @@ public class GameModel {
     
     public final Player[] _players = new Player[2];
     
-    private int curPlayer=0;
+    private int curPlayer=1;
     
     public void ChangePlayer()
     {
@@ -34,7 +34,7 @@ public class GameModel {
         ChangePlayer();
     }
     
-    private Player curPlayer()
+    public Player curPlayer()
     {
         return _players[curPlayer];
     }

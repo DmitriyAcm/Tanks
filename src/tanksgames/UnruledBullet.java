@@ -6,16 +6,17 @@
 package tanksgames;
 
 import Coordination.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
 
 /**
  *
  * @author dmitr
  */
 public class UnruledBullet extends Bullet{
+    static String namefiles = "src/tanksgames/Img/UnruledBullet/1.png";
     
-    UnruledBullet(Direction dir, GameField field)
+    public UnruledBullet(Direction dir, GameField field)
     {
         super(dir,(int)1e9,field,1);
     }
@@ -31,8 +32,8 @@ public class UnruledBullet extends Bullet{
     }
     
     @Override
-    public ImageIcon getImage()
+    BufferedImage PaintImage()
     {
-        return new ImageIcon("src/tanksgames/Img/UnruledBullet/2.png");
+        return super.getImage(namefiles);
     }
 }

@@ -5,6 +5,7 @@
  */
 package view;
 
+import Coordination.Rotation;
 import Listeners.ShockWaveEvent;
 import Listeners.ShockWaveListener;
 import java.awt.Color;
@@ -14,6 +15,8 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -28,12 +31,13 @@ import javax.swing.JPanel;
 import tanksgames.GameModel;
 import javax.swing.border.Border;
 import tanksgames.ShockWave;
+import tanksgames.UnruledBullet;
 
 /**
  *
  * @author dmitr
  */
-public class GamePanel extends JFrame{
+public class GamePanel extends JFrame implements KeyListener {
     private JPanel fieldPanel = new JPanel();
     
     private JPanel infoPanel = new JPanel();
@@ -71,7 +75,9 @@ public class GamePanel extends JFrame{
         
         pack();
         setResizable(false);
+        addKeyListener(this);
         
+        _model.ChangePlayer();
     }
     
     private void createField(){
@@ -140,7 +146,6 @@ public class GamePanel extends JFrame{
         public void actionPerformed(ActionEvent e) {
            
             JButton button = (JButton) e.getSource();
-            button.setEnabled(false);
             
             // Ставим на поле метку текущего игрока
             //Point p = buttonPosition(button);
@@ -148,12 +153,62 @@ public class GamePanel extends JFrame{
         }
     }
     
-    // ударная волна
-    private class GameOverListerner implements ShockWaveListener
+    @Override
+    public void keyReleased(KeyEvent ke)
     {
-        @Override
-        public void ExplosiveBullet(ShockWaveEvent e)
+    
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent ke)
+    {
+    
+    }
+    
+    @Override
+    public void keyPressed(KeyEvent ke)
+    {
+        if(_model.curPlayer()._numStep<=0)
+            return;
+        
+        switch (ke.getKeyCode()) {
+            case KeyEvent.VK_A:
+                _model.curPlayer().tank().Rotate(Rotation.Left());
+                _model.curPlayer()._numStep--;
+                break;
+            case KeyEvent.VK_D:
+                _model.curPlayer().tank().Rotate(Rotation.Right());
+                _model.curPlayer()._numStep--;
+                break;
+            case KeyEvent.VK_W:
+                if(_model.curPlayer().tank().Move())
+                {
+                    _model.curPlayer()._numStep--;
+                }
+                break;
+            case KeyEvent.VK_S:
+                if(_model.curPlayer().tank().Fire(new UnruledBullet(_model.curPlayer().tank()._direct,_model.field())))
+                {
+                    _model.curPlayer()._numStep--;
+                }
+                break;
+            case KeyEvent.VK_SPACE:
+                _model.PassStep();
+                break;
+            default:
+                break;
+        }
+        
+        if(_model.curPlayer()._numStep<=0)
         {
+            _model.ChangePlayer();
+        }
+    }
+    
+    // ударная волна
+    private class GameOverListerner implements ShockWaveListener{
+        @Override
+        public void ExplosiveBullet(ShockWaveEvent e){
             //if()
             {
                 

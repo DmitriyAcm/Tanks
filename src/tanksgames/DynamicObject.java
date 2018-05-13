@@ -10,17 +10,10 @@ import Coordination.Direction;
  *
  * @author dmitr
  */
-abstract public class DynamicObject extends Object{
-    protected Direction _direct;
+abstract public class DynamicObject extends DestructibleObject{
+    public Direction _direct;
     
-    GameField _field; 
-    
-    DynamicObject(Direction dir, GameField field)
-    {
-        super();
-        _direct = dir;
-        _field = field;
-    }
+    GameField _field;
     
     DynamicObject(Direction dir, int PointHealth, GameField field)
     {

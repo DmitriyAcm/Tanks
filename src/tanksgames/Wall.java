@@ -4,39 +4,24 @@
  * and open the template in the editor.
  */
 package tanksgames;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 import javax.swing.ImageIcon;
 /**
  *
  * @author dmitr
  */
-public class Wall extends Object{
+public class Wall extends DestructibleObject{
+    static String namefiles = "src/tanksgames/Img/Wall/1.png";
+    
     public Wall()
     {
         super((new java.util.Random().nextInt(3))+1);
     }
     
     @Override
-    public boolean AirBlocks()
+    BufferedImage PaintImage()
     {
-        return true;
-    }
-    
-    @Override
-    public boolean GroundBlocks()
-    {
-        return true;
-    }
-    
-    @Override
-    public void DamageObject()
-    {
-        super._PointsHealth--;
-    }
-    
-    @Override
-    public ImageIcon getImage()
-    {
-        return new ImageIcon("src/tanksgames/Img/Wall/1.png");
+        return super.getImage(namefiles);
     }
 }

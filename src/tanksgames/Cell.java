@@ -6,14 +6,14 @@
 package tanksgames;
 import Coordination.Direction;
 import Coordination.Rotation;
+import java.util.ArrayList;
 /**
  *
  * @author dmitr
  */
 public class Cell {
     
-    public Object _AirObj;
-    public Object _GroundObj;
+    public ArrayList<Object> _objects;
     
     private final Cell[] _NearbyCell = new Cell[Direction.NUMDIRECT];
     
@@ -34,7 +34,7 @@ public class Cell {
     
     boolean CheckObject(Object obj)
     {
-        return _AirObj == obj || _GroundObj == obj;
+        return _objects.contains(obj);
     }
     
     boolean AddObject(Object obj)
@@ -44,32 +44,15 @@ public class Cell {
             throw new NullPointerException("Object for add non valid");
         }
         
-        if(obj.AirBlocks() && obj.GroundBlocks())
+        if(obj instanceof Bullet || _objects.isEmpty())
         {
-            if(_AirObj == null && _GroundObj == null)
-            {
-                _AirObj = obj;
-                _GroundObj = obj;
-                return true;
-            }
+            _objects.add(obj);
+            return true;
         }
-        else if(obj.AirBlocks())
+        else
         {
-            if(_AirObj == null)
-            {
-                _AirObj = obj;
-                return true;
-            }
+            return false;
         }
-        else if(obj.GroundBlocks())
-        {
-            if(_GroundObj == null)
-            {
-                _GroundObj = obj;
-                return true;
-            }
-        }
-        return false;
     }
     
     boolean DeleteObject(Object obj)
@@ -78,36 +61,18 @@ public class Cell {
         {
             throw new NullPointerException("Object for delete non valid");
         }
-        
-        boolean isDelete = false;
-        
-        if(_AirObj == obj)
-        {
-            _AirObj = null;
-            isDelete = true;
-        }
-        
-        if(_GroundObj == obj)
-        {
-            _GroundObj = null;
-            isDelete = true;
-        }
-        
-        return isDelete;
+
+        return _objects.remove(obj);
     }
     
     void DamageCell()
     {
-        _AirObj.DamageObject();
-        _GroundObj.DamageObject();
-        
-        if(_AirObj.Destroyed())
+        for(Object curObj : _objects)
         {
-            _AirObj=null;
-        }
-        if(_GroundObj.Destroyed())
-        {
-            _GroundObj=null;
+            if(curObj instanceof DestructibleObject)
+            {
+                ((DestructibleObject)curObj).DamageObject();
+            }
         }
     }
 }

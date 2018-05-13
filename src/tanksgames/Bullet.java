@@ -17,7 +17,7 @@ public abstract class Bullet extends DynamicObject {
     
     Bullet(Direction dir, int lenFly, GameField field, int radius)
     {
-        super(dir,field);
+        super(dir,1,field);
         _LenghtFlight = lenFly;
         _Radius = radius; 
     }
@@ -38,6 +38,7 @@ public abstract class Bullet extends DynamicObject {
             Direction dir1 = cur.next();
             while(dir1 != null)
             {
+                super._direct=dir1;
                 if(!super.moveTo(dir1))
                 {
                     position=_field.FindCell(this).nextCell(dir1);
@@ -56,22 +57,4 @@ public abstract class Bullet extends DynamicObject {
     }
     
     public abstract ArrayList<Vector> traectory();
-    
-    @Override
-    public boolean AirBlocks()
-    {
-        return true;
-    }
-    
-    @Override
-    public boolean GroundBlocks()
-    {
-        return false;
-    }
-    
-    @Override
-    public void DamageObject()
-    {
-    
-    }
 }

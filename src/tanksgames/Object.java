@@ -4,32 +4,26 @@
  * and open the template in the editor.
  */
 package tanksgames;
-import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 /**
  *
  * @author dmitr
  */
 abstract public class Object{
-    protected int _PointsHealth;
 
-    public abstract ImageIcon getImage();
+    protected BufferedImage getImage(String namefile)
+    {
+        File file = new File(namefile);
+        BufferedImage f = ImageIO.read(file);
+        return f;
+    }
+    
+    abstract BufferedImage PaintImage();
     
     Object()
     {
-        _PointsHealth = (int)1e9;
+        
     }
-    
-    Object(int PointHealth)
-    {
-        _PointsHealth = PointHealth;
-    }
-    
-    boolean Destroyed()
-    {
-        return _PointsHealth <= 0;
-    }
-    
-    abstract void DamageObject();
-    abstract boolean AirBlocks();
-    abstract boolean GroundBlocks();      
 }
