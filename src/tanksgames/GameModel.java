@@ -8,6 +8,8 @@ import Listeners.ShockWaveEvent;
 import Listeners.ShockWaveListener;
 import view.ColorObject;
 import java.util.Random;
+import Coordination.Coordinate;
+
 
 /**
  *
@@ -52,8 +54,8 @@ public class GameModel {
         int s1 = ((spos>>1)&1);
         int s2 = ((spos)&1);
         
-        _players[0]=new Player(_field,_field.GetCell((f2)*(_field.width()-1), f1*(_field.height()-1)),frst);
-        _players[1]=new Player(_field,_field.GetCell((s2)*(_field.width()-1), s1*(_field.height()-1)),scd);
+        _players[0]=new Player(_field,_field.GetCell(new Coordinate(f2*(_field.width()-1), f1*(_field.height()-1))),frst);
+        _players[1]=new Player(_field,_field.GetCell(new Coordinate(s2*(_field.width()-1), s1*(_field.height()-1))),scd);
                      
        GenerateObject();
     }

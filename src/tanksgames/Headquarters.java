@@ -25,7 +25,7 @@ public class Headquarters extends DestructibleObject {
     }
     
     @Override
-    BufferedImage PaintImage()
+    public BufferedImage PaintImage()
     {
         return super.getImage(namefiles);
     }

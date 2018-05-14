@@ -5,6 +5,7 @@
  */
 package tanksgames;
 
+import Coordination.Coordinate;
 import Coordination.Direction;
 import Coordination.Rotation;
 
@@ -94,13 +95,28 @@ public class GameField {
         return false;
     }
     
-    public Cell GetCell(int X, int Y)
+    public Cell GetCell(Coordinate coord)
     {
-        if(X>=_width || Y>=_height)
+        if(coord.getX()>=_width || coord.getY()>=_height)
         {
             return null;
         }
 
-        return _field[Y][X];
+        return _field[coord.getY()][coord.getX()];
+    }
+    
+    public Coordinate FindCoord(Cell cell) 
+    {
+        for(int i=0;i<_height;++i)
+        {
+            for(int j=0;j<_width;++j)
+            {
+                if(cell == _field[i][j])
+                {
+                    return new Coordinate(j,i);
+                }
+            }  
+        }
+        return null;
     }
 }

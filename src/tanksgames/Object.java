@@ -6,6 +6,7 @@
 package tanksgames;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 /**
  *
@@ -15,12 +16,19 @@ abstract public class Object{
 
     protected BufferedImage getImage(String namefile)
     {
-        File file = new File(namefile);
-        BufferedImage f = ImageIO.read(file);
-        return f;
+        try
+        {
+            return ImageIO.read(new File(namefile));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
     
-    abstract BufferedImage PaintImage();
+    abstract public BufferedImage PaintImage();
     
     Object()
     {

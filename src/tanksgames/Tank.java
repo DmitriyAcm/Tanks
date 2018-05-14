@@ -40,8 +40,12 @@ public class Tank extends DynamicObject{
     
     public boolean Move()
     {
-        _cooldown--;
-        return super.moveTo(super._direct);
+        if(super.moveTo(super._direct))
+        {
+            _cooldown--;
+            return true;
+        }
+        return false;
     }
     
     public boolean Fire(Bullet bull)
@@ -59,7 +63,7 @@ public class Tank extends DynamicObject{
     }
     
     @Override
-    BufferedImage PaintImage()
+    public BufferedImage PaintImage()
     {
         return super.getImage(namefiles);
     }

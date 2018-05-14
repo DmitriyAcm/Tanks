@@ -5,6 +5,7 @@
  */
 package view;
 
+import Coordination.Coordinate;
 import Coordination.Rotation;
 import Listeners.ShockWaveEvent;
 import Listeners.ShockWaveListener;
@@ -17,6 +18,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
+import static java.lang.Thread.sleep;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -30,8 +38,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import tanksgames.GameModel;
 import javax.swing.border.Border;
+import tanksgames.Cell;
 import tanksgames.ShockWave;
 import tanksgames.UnruledBullet;
+import tanksgames.Object;
 
 /**
  *
@@ -51,6 +61,10 @@ public class GamePanel extends JFrame implements KeyListener {
     private final int TITLE_HEIGHT = 40;
     
     private final GameModel _model;
+    
+    private JButton[][] _field;
+    
+    private static ImageIcon _bang;
     
     public GamePanel(GameModel model) {
         super();
@@ -78,6 +92,15 @@ public class GamePanel extends JFrame implements KeyListener {
         addKeyListener(this);
         
         _model.ChangePlayer();
+        
+        try
+        {
+            _bang = new ImageIcon(ImageIO.read(new File("src/tanksgames/Img/Bang/1.png")));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
     
     private void createField(){
@@ -97,31 +120,19 @@ public class GamePanel extends JFrame implements KeyListener {
     public void repaintField() {
         
         fieldPanel.removeAll();
-
+        _field = new JButton[_model.field().height()][_model.field().width()];
+        
         for (int row = 0; row < _model.field().height(); row++) 
         {
             for (int col = 0; col < _model.field().width(); col++) 
             {
                 JButton button = new JButton("");
                 
-                ImageIcon img = null;
+                _field[row][col] = button;
                 
-                if(_model.field().GetCell(col, row)._AirObj!=null)
-                {
-                    img = _model.field().GetCell(col, row)._AirObj.getImage();
-                    
-                }
+                Cell curCell = _model.field().GetCell(new Coordinate(col, row));
                 
-                if(_model.field().GetCell(col, row)._GroundObj!=null)
-                {
-                    img = _model.field().GetCell(col, row)._GroundObj.getImage();
-                }
-                
-                if(img != null)
-                {
-                    button.setIcon(img);
-                }
-                
+                button.setIcon(GetCellImage(curCell));
                 button.setFocusable(false);
                 fieldPanel.add(button);
                 button.addActionListener(new ClickListener());
@@ -130,7 +141,65 @@ public class GamePanel extends JFrame implements KeyListener {
 
         fieldPanel.validate();
     }
-      
+    
+    private ImageIcon GetCellImage(Cell curCell)
+    {
+        BufferedImage image = WhiteImg();
+                
+        for(Object obj : curCell._objects)
+        {
+            image = Concat(image,obj.PaintImage());
+        }
+        return new ImageIcon(image);
+    }
+    
+    private BufferedImage WhiteImg()
+    {
+        BufferedImage image = new BufferedImage(CELL_SIZE,CELL_SIZE,BufferedImage.TYPE_INT_RGB);
+        WritableRaster rast = image.getRaster();
+
+        for(int i=0;i<rast.getHeight();++i)
+        {
+            for(int j=0;j<rast.getWidth();++j)
+            {
+                int[] pix = rast.getPixel(j, i, new int[4]);
+                pix[0]=255;
+                pix[1]=255;
+                pix[2]=255;
+                rast.setPixel(j, i, pix);
+            }
+        }
+
+        image.setData(rast);
+                
+        return image;
+    }
+    
+    private BufferedImage Concat(BufferedImage left, BufferedImage right)
+    {
+
+        WritableRaster rastLeft = left.getRaster();
+        Raster rastRight = right.getRaster();
+
+        for(int i=0;i<rastLeft.getHeight();++i)
+        {
+            for(int j=0;j<rastLeft.getWidth();++j)
+            {
+                int[] pixR = rastRight.getPixel(j, i, new int[4]);
+                
+                if(!(pixR[0]==255 && pixR[1]==255 && pixR[2]==255))
+                {
+                    rastLeft.setPixel(j, i, pixR);
+                }
+            }
+        }
+
+        left.setData(rastLeft);
+                
+        return left;
+    }
+    
+    
     private void setEnabledField(boolean on){
 
         Component comp[] = fieldPanel.getComponents();
@@ -138,21 +207,7 @@ public class GamePanel extends JFrame implements KeyListener {
         {    c.setEnabled(on);   }
     }  
     
-    
-    // Классы слушателей
-    // 
-    private class ClickListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-           
-            JButton button = (JButton) e.getSource();
-            
-            // Ставим на поле метку текущего игрока
-            //Point p = buttonPosition(button);
-            //_model.activePlayer().setLabelTo(_model.field(), p);
-        }
-    }
-    
+    // -------------- Обработка клавиш
     @Override
     public void keyReleased(KeyEvent ke)
     {
@@ -204,15 +259,54 @@ public class GamePanel extends JFrame implements KeyListener {
             _model.ChangePlayer();
         }
     }
+    ///////////////////////////////////
     
     // ударная волна
     private class GameOverListerner implements ShockWaveListener{
         @Override
         public void ExplosiveBullet(ShockWaveEvent e){
-            //if()
+            for(Cell cur : e._list)
+            {
+                Coordinate coord = _model.field().FindCoord(cur);
+                
+                JButton curBut = _field[coord.getY()][coord.getX()];
+                
+                ImageIcon f = (ImageIcon)curBut.getIcon();
+                
+                curBut.setIcon(ImageIcon(Concat(f,_bang)));
+            }
+            try
+            {
+                sleep(500);
+            }
+            catch(InterruptedException g)
             {
                 
             }
+            for(Cell cur : e._list)
+            {
+                Coordinate coord = _model.field().FindCoord(cur);
+                
+                JButton curBut = _field[coord.getY()][coord.getX()];
+                
+                curBut.setIcon(GetCellImage(cur));
+            }
         }
     }
+    ///////////////////////////////////
+    
+    // Класс слушателя поля
+    // 
+    private class ClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+           
+            JButton button = (JButton) e.getSource();
+            
+            // Ставим на поле метку текущего игрока
+            //Point p = buttonPosition(button);
+            //_model.activePlayer().setLabelTo(_model.field(), p);
+        }
+    }
+    ///////////////////////////////////
 }

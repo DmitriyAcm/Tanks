@@ -32,7 +32,7 @@ public class UnruledBullet extends Bullet{
     }
     
     @Override
-    BufferedImage PaintImage()
+    public BufferedImage PaintImage()
     {
         return super.getImage(namefiles);
     }

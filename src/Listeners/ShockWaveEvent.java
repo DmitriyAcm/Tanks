@@ -5,15 +5,20 @@
  */
 package Listeners;
 
+import java.util.ArrayList;
 import java.util.EventObject;
+import tanksgames.Cell;
 
 /**
  *
  * @author dmitr
  */
 public class ShockWaveEvent extends EventObject{
-    public ShockWaveEvent(Object source)
+    public ArrayList<Cell> _list;
+    
+    public ShockWaveEvent(Object source, ArrayList<Cell> curList)
     {
         super(source);
+        _list = curList;
     }
 }

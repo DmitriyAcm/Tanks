@@ -15,7 +15,7 @@ public class Water extends NonDestructibleObject{
     static String namefiles = "src/tanksgames/Img/Water/1.png";
     
     @Override
-    BufferedImage PaintImage()
+    public BufferedImage PaintImage()
     {
         return super.getImage(namefiles);
     }

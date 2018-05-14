@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Cell {
     
-    public ArrayList<Object> _objects;
+    public ArrayList<Object> _objects = new ArrayList<Object>();
     
     private final Cell[] _NearbyCell = new Cell[Direction.NUMDIRECT];
     
@@ -65,7 +65,7 @@ public class Cell {
         return _objects.remove(obj);
     }
     
-    void DamageCell()
+    public void DamageCell()
     {
         for(Object curObj : _objects)
         {

@@ -30,9 +30,9 @@ public class ShockWave {
         _listeners.remove(list);
     }
     
-    protected void InformListener()
+    private void InformListener(ArrayList<Cell> obl)
     {
-        ShockWaveEvent event = new ShockWaveEvent(this);
+        ShockWaveEvent event = new ShockWaveEvent(this,obl);
         for(ShockWaveListener i : _listeners)
         {
             i.ExplosiveBullet(event);
@@ -53,7 +53,13 @@ public class ShockWave {
         mp.put(pos,"1");
         pos.DamageCell();
         
-        
+        ArrayList<Cell> curFld = new ArrayList<Cell>();
+        for(Cell cl : q)
+        {
+            curFld.add(cl);
+        }
+        InformListener(curFld);
+        curFld.clear();
         while(!q.isEmpty())
         {
             Cell curCell = q.pop();
@@ -74,14 +80,22 @@ public class ShockWave {
                     q.add(newCell);
                     mp.put(newCell, Integer.toString(curDist+1));
                     newCell.DamageCell();
+                    if(mp.get(q.getFirst())==Integer.toString(curDist+1))
+                    {
+                        for(Cell cl : q)
+                        {
+                            curFld.add(cl);
+                        }
+                        InformListener(curFld);
+                        curFld.clear();
+                    }
                 }
-                
                 curDir = curDir.Rotate(Rotation.Right());
             }
             while(curDir.direct()!=Direction.Up().direct());
         }
         
-        InformListener();
+        
     }
     
 }
