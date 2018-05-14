@@ -17,7 +17,7 @@ public class Tank extends DynamicObject{
     static String namefiles = "src/tanksgames/Img/Tank/1.png";
     
     private ColorObject _color;
-    private int _cooldown = 0;
+    public int _cooldown = 0;
     
     public Tank(Direction dir, GameField field, ColorObject color)
     {
@@ -52,6 +52,7 @@ public class Tank extends DynamicObject{
     {
         if(!Recharge())
         {
+            _field.FindCell(this).AddObject(bull);
             bull.Fire();
             _cooldown=5;
             return true;

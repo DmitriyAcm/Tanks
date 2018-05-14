@@ -11,6 +11,7 @@ import Coordination.Vector;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TreeMap;
 import javax.swing.ImageIcon;
@@ -27,17 +28,18 @@ public class RuledBullet extends Bullet{
     {
         super(dir,Lenght,field,2);
         _to = to;
-        _base = _field.FindCell(this);
     }
     
     @Override
     public ArrayList<Vector> traectory()
     {
+        _base = _field.FindCell(this);
+        
         ArrayList<Vector> list = new ArrayList<Vector>();
         
         LinkedList<Cell> q = new LinkedList<Cell>();
         
-        TreeMap mp = new TreeMap<Cell,String>();
+        HashMap<Cell,String> mp = new HashMap<Cell,String>();
         
         Cell pos = _base;
         
@@ -61,7 +63,7 @@ public class RuledBullet extends Bullet{
             {
                 Cell newCell = curCell.nextCell(curDir);
                 
-                if(newCell == _to || mp.get(newCell)==null)
+                if(newCell == _to || newCell != null && (newCell._objects.isEmpty() || !(newCell._objects.get(0) instanceof Water)) && mp.get(newCell)==null)
                 {
                     q.add(newCell);
                     mp.put(newCell, Integer.toString(curDist+1));
@@ -93,7 +95,7 @@ public class RuledBullet extends Bullet{
 
                     if(curDist!= null && Integer.parseInt(curDist)+1 == Integer.parseInt((String)mp.get(curCell)))
                     {       
-                        list.add(new Vector(curDir,1));
+                        list.add(new Vector(curDir.Rotate(Rotation.Right()).Rotate(Rotation.Right()),1));
                         curCell = newCell;
                         break;
                     }
@@ -103,8 +105,6 @@ public class RuledBullet extends Bullet{
                 while(curDir.direct()!=Direction.Up().direct());
             }
         }
-        
-        Collections.reverse(list);
         
         return list;
     }

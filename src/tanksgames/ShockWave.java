@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import Coordination.*;
 import Listeners.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -47,7 +48,7 @@ public class ShockWave {
     {
         LinkedList<Cell> q = new LinkedList<Cell>();
         
-        TreeMap mp = new TreeMap<Cell,String>();
+        HashMap mp = new HashMap<Cell,String>();
         
         q.add(pos);
         mp.put(pos,"1");
@@ -75,7 +76,7 @@ public class ShockWave {
             {
                 Cell newCell = curCell.nextCell(curDir);
                 
-                if(mp.get(newCell)==null)
+                if(newCell != null && mp.get(newCell)==null)
                 {
                     q.add(newCell);
                     mp.put(newCell, Integer.toString(curDist+1));

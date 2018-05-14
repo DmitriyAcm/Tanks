@@ -37,7 +37,7 @@ public class Cell {
         return _objects.contains(obj);
     }
     
-    boolean AddObject(Object obj)
+    public boolean AddObject(Object obj)
     {
         if(obj==null)
         {
@@ -55,7 +55,7 @@ public class Cell {
         }
     }
     
-    boolean DeleteObject(Object obj)
+    public boolean DeleteObject(Object obj)
     {
         if(obj==null)
         {
@@ -67,11 +67,16 @@ public class Cell {
     
     public void DamageCell()
     {
-        for(Object curObj : _objects)
+        ArrayList<Object> curobjects = (ArrayList<Object>)_objects.clone();
+        for(Object curObj : curobjects)
         {
             if(curObj instanceof DestructibleObject)
             {
                 ((DestructibleObject)curObj).DamageObject();
+                if(((DestructibleObject) curObj).Destroyed())
+                {
+                    DeleteObject(curObj);
+                }
             }
         }
     }

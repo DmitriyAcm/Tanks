@@ -4,11 +4,12 @@
  * and open the template in the editor.
  */
 package tanksgames;
-import Listeners.ShockWaveEvent;
-import Listeners.ShockWaveListener;
 import view.ColorObject;
 import java.util.Random;
 import Coordination.Coordinate;
+import Listeners.FireRuledBulletEvent;
+import Listeners.FireRuledBulletListener;
+import java.util.ArrayList;
 
 
 /**
@@ -17,7 +18,7 @@ import Coordination.Coordinate;
  */
 public class GameModel {
     private final int _begCountStep;
-    private final int _distRuledBullet;
+    public final int _distRuledBullet;
     private final GameField _field;
     
     public final Player[] _players = new Player[2];
@@ -29,10 +30,12 @@ public class GameModel {
         curPlayer()._numStep=0;
         curPlayer^=1;
         curPlayer()._numStep=_begCountStep;
+        InformListener(field().FindCell(curPlayer().tank()));
     }
     
     public void PassStep()
     {
+        curPlayer().tank()._cooldown--;
         ChangePlayer();
     }
     
@@ -69,5 +72,27 @@ public class GameModel {
     public GameField field()
     {
         return _field;
+    }
+    
+    private ArrayList<FireRuledBulletListener> _listeners = new ArrayList<>();
+    
+    // -- обработка слушателей
+    public void AddListener(FireRuledBulletListener list)
+    {
+        _listeners.add(list);
+    }
+    
+    public void RemoveListener(FireRuledBulletListener list)
+    {
+        _listeners.remove(list);
+    }
+    
+    private void InformListener(Cell curPos)
+    {
+        FireRuledBulletEvent event = new FireRuledBulletEvent(this,curPos);
+        for(FireRuledBulletListener i : _listeners)
+        {
+            i.RepaintField(event);
+        }
     }
 }

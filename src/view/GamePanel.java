@@ -7,6 +7,8 @@ package view;
 
 import Coordination.Coordinate;
 import Coordination.Rotation;
+import Listeners.FireRuledBulletEvent;
+import Listeners.FireRuledBulletListener;
 import Listeners.ShockWaveEvent;
 import Listeners.ShockWaveListener;
 import java.awt.Color;
@@ -24,6 +26,7 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -36,12 +39,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import tanksgames.GameModel;
 import javax.swing.border.Border;
 import tanksgames.Cell;
 import tanksgames.ShockWave;
 import tanksgames.UnruledBullet;
 import tanksgames.Object;
+import tanksgames.RuledBullet;
 
 /**
  *
@@ -64,13 +69,12 @@ public class GamePanel extends JFrame implements KeyListener {
     
     private JButton[][] _field;
     
-    private static ImageIcon _bang;
+    private static BufferedImage _bang;
     
     public GamePanel(GameModel model) {
         super();
             
         _model = model;
-        ShockWave.AddListener(new GameOverListerner());
         
         this.setTitle("Танчики");
         
@@ -84,18 +88,22 @@ public class GamePanel extends JFrame implements KeyListener {
         
         fieldPanel.setDoubleBuffered(true);
         createField();
-        setEnabledField(true);
-        this.add(fieldPanel);
+        
         
         pack();
         setResizable(false);
+        
+        
+        // слушатели
         addKeyListener(this);
+        ShockWave.AddListener(new GameOverListerner());
+        _model.AddListener(new ChangePlayer());
         
         _model.ChangePlayer();
         
         try
         {
-            _bang = new ImageIcon(ImageIO.read(new File("src/tanksgames/Img/Bang/1.png")));
+            _bang = ImageIO.read(new File("src/tanksgames/Img/Bang/1.png"));
         }
         catch(IOException e)
         {
@@ -114,11 +122,6 @@ public class GamePanel extends JFrame implements KeyListener {
         fieldPanel.setMinimumSize(fieldDimension);
         fieldPanel.setMaximumSize(fieldDimension);
         
-        repaintField();
-    }
-    
-    public void repaintField() {
-        
         fieldPanel.removeAll();
         _field = new JButton[_model.field().height()][_model.field().width()];
         
@@ -130,19 +133,45 @@ public class GamePanel extends JFrame implements KeyListener {
                 
                 _field[row][col] = button;
                 
-                Cell curCell = _model.field().GetCell(new Coordinate(col, row));
-                
-                button.setIcon(GetCellImage(curCell));
-                button.setFocusable(false);
                 fieldPanel.add(button);
-                button.addActionListener(new ClickListener());
             }
         }
-
-        fieldPanel.validate();
     }
     
-    private ImageIcon GetCellImage(Cell curCell)
+    public void repaintField() {
+        setEnabledField(true);
+        //this.remove(fieldPanel);
+        for (int row = 0; row < _model.field().height(); row++) 
+        {
+            for (int col = 0; col < _model.field().width(); col++) 
+            {       
+                Cell curCell = _model.field().GetCell(new Coordinate(col, row));
+                
+                RuledBullet bul = new RuledBullet(_model.curPlayer().tank()._direct,_model._distRuledBullet,_model.field(),curCell);
+                
+                Cell beg = _model.field().FindCell(_model.curPlayer().tank());
+                beg.AddObject(bul);
+                
+                ArrayList f = bul.traectory();
+                boolean fg = f.isEmpty();
+                
+                
+                _field[row][col].setEnabled(!fg || beg==curCell);
+                beg.DeleteObject(bul);
+                
+                _field[row][col].setIcon(new ImageIcon(GetCellImage(curCell)));
+                _field[row][col].setFocusable(false);
+                _field[row][col].addActionListener(new ClickListener());
+                
+            }
+        }
+        fieldPanel.validate();
+        this.add(fieldPanel);
+        
+        
+    }
+    
+    private BufferedImage GetCellImage(Cell curCell)
     {
         BufferedImage image = WhiteImg();
                 
@@ -150,7 +179,7 @@ public class GamePanel extends JFrame implements KeyListener {
         {
             image = Concat(image,obj.PaintImage());
         }
-        return new ImageIcon(image);
+        return image;
     }
     
     private BufferedImage WhiteImg()
@@ -261,36 +290,64 @@ public class GamePanel extends JFrame implements KeyListener {
     }
     ///////////////////////////////////
     
+    private Cell FindCell(JButton cur)
+    {
+        for (int row = 0; row < _model.field().height(); row++) 
+        {
+            for (int col = 0; col < _model.field().width(); col++) 
+            {       
+                if(_field[row][col]==cur)
+                {
+                   return _model.field().GetCell(new Coordinate(col,row));
+                }
+            }
+        }
+        
+        return null;
+    }
+    
     // ударная волна
     private class GameOverListerner implements ShockWaveListener{
-        @Override
-        public void ExplosiveBullet(ShockWaveEvent e){
-            for(Cell cur : e._list)
-            {
-                Coordinate coord = _model.field().FindCoord(cur);
+            @Override
+            public void ExplosiveBullet(ShockWaveEvent e){
                 
-                JButton curBut = _field[coord.getY()][coord.getX()];
+                for(Cell cur : e._list)
+                {
+                    Coordinate coord = _model.field().FindCoord(cur);
+
+                    JButton curBut = _field[coord.getY()][coord.getX()];
+
+                    curBut.setIcon(new ImageIcon(Concat(GetCellImage(FindCell(curBut)),_bang)));
+                }
+                add(fieldPanel);
+            
                 
-                ImageIcon f = (ImageIcon)curBut.getIcon();
+                SwingUtilities.invokeLater(new Runnable(){
+
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            Thread.sleep(500);
+                        }
+                        catch(InterruptedException g)
+                        {
+
+                        }
+                    }                
+                });
                 
-                curBut.setIcon(ImageIcon(Concat(f,_bang)));
-            }
-            try
-            {
-                sleep(500);
-            }
-            catch(InterruptedException g)
-            {
+                for(Cell cur : e._list)
+                {
+                    Coordinate coord = _model.field().FindCoord(cur);
+
+                    JButton curBut = _field[coord.getY()][coord.getX()];
+
+                    curBut.setIcon(new ImageIcon(GetCellImage(cur)));
+                }
                 
-            }
-            for(Cell cur : e._list)
-            {
-                Coordinate coord = _model.field().FindCoord(cur);
-                
-                JButton curBut = _field[coord.getY()][coord.getX()];
-                
-                curBut.setIcon(GetCellImage(cur));
-            }
+                add(fieldPanel);
         }
     }
     ///////////////////////////////////
@@ -300,13 +357,27 @@ public class GamePanel extends JFrame implements KeyListener {
     private class ClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-           
-            JButton button = (JButton) e.getSource();
             
-            // Ставим на поле метку текущего игрока
-            //Point p = buttonPosition(button);
-            //_model.activePlayer().setLabelTo(_model.field(), p);
+            if(_model.curPlayer().tank().Fire(new RuledBullet(_model.curPlayer().tank().
+                    _direct,_model._distRuledBullet,_model.field(),FindCell((JButton) e.getSource()))))
+            {
+                _model.curPlayer()._numStep--;
+
+                if(_model.curPlayer()._numStep<=0)
+                {
+                    _model.ChangePlayer();
+                }
+            }
         }
     }
     ///////////////////////////////////
+    
+    private class ChangePlayer implements FireRuledBulletListener
+    {
+        @Override
+        public void RepaintField(FireRuledBulletEvent e)
+        {
+            repaintField();
+        }
+    }
 }
