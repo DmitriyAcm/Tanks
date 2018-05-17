@@ -5,6 +5,8 @@
  */
 package tanksgames;
 import Coordination.Direction;
+import Coordination.Rotation;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -26,5 +28,19 @@ abstract public class DynamicObject extends DestructibleObject{
     {
         _direct = dir;
         return _field.moveObjectTo(this, dir);
+    }
+    
+    // Отрисовка поворачивающихся объектов
+    @Override
+    protected BufferedImage getImage(String namefile)
+    {
+        BufferedImage res = super.getImage(namefile);
+        
+        for(int i=0;i<_direct.direct();++i)
+        {
+            res = Rotation.RotateSquadImage(res);
+        }
+        
+        return res;
     }
 }
