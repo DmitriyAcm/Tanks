@@ -1,5 +1,12 @@
 
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import view.ColorObject;
 import view.ControllView;
 
 /*
@@ -19,8 +26,11 @@ public class TanksGames {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        JFrame app = new ControllView();
-        app.setVisible(false);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame app = new ControllView();
+                app.setVisible(false);
+            }
+        });
     }
-    
 }

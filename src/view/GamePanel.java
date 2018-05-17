@@ -26,6 +26,7 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -309,8 +310,7 @@ public class GamePanel extends JFrame implements KeyListener {
     // ударная волна
     private class GameOverListerner implements ShockWaveListener{
             @Override
-            public void ExplosiveBullet(ShockWaveEvent e){
-                
+            public void  ExplosiveBullet(ShockWaveEvent e){
                 for(Cell cur : e._list)
                 {
                     Coordinate coord = _model.field().FindCoord(cur);
@@ -320,25 +320,24 @@ public class GamePanel extends JFrame implements KeyListener {
                     curBut.setIcon(new ImageIcon(Concat(GetCellImage(FindCell(curBut)),_bang)));
                 }
                 add(fieldPanel);
-            
-                
-                SwingUtilities.invokeLater(new Runnable(){
+                /*try
+                {
+                    SwingUtilities.invokeAndWait(new Runnable(){
 
-                    @Override
-                    public void run()
-                    {
-                        try
+                        @Override
+                        public synchronized void run()
                         {
-                            Thread.sleep(500);
+                            
+                            notify();
                         }
-                        catch(InterruptedException g)
-                        {
+                        }
+                    );
+                }
+                catch(InvocationTargetException g)
+                {
 
-                        }
-                    }                
-                });
-                
-                for(Cell cur : e._list)
+                }
+                /*for(Cell cur : e._list)
                 {
                     Coordinate coord = _model.field().FindCoord(cur);
 
@@ -346,8 +345,24 @@ public class GamePanel extends JFrame implements KeyListener {
 
                     curBut.setIcon(new ImageIcon(GetCellImage(cur)));
                 }
+                try
+                {
+                    wait();
+                }
+                catch(InterruptedException g)
+                {
+
+                }
                 
-                add(fieldPanel);
+                try
+                {
+                    Thread.sleep(500);
+                }
+                catch(InterruptedException g)
+                {
+
+                }*/
+                
         }
     }
     ///////////////////////////////////

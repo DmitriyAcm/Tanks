@@ -86,7 +86,7 @@ public class GameField {
     public boolean moveObjectTo(Object obj, Direction dir)
     {
         Cell curCell = FindCell(obj);
-        if(curCell.CheckObject(obj) && curCell.nextCell(dir).AddObject(obj))
+        if(curCell.CheckObject(obj) && curCell.nextCell(dir)!=null && curCell.nextCell(dir).AddObject(obj))
         {
             curCell.DeleteObject(obj);
             return true;

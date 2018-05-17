@@ -19,7 +19,7 @@ public class Cell {
     
     Cell()
     {
-    
+        
     }
     
     public void SetCell(Cell cell, Direction direct)

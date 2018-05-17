@@ -6,6 +6,8 @@
 package tanksgames;
 import Coordination.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import static java.util.Collections.swap;
 import javax.swing.ImageIcon;
 import view.ColorObject;
 
@@ -66,6 +68,8 @@ public class Tank extends DynamicObject{
     @Override
     public BufferedImage PaintImage()
     {
-        return super.getImage(namefiles);
+        BufferedImage curImage = super.getImage(namefiles);
+        
+        return ColorObject.PaintImage(curImage, _color);
     }
 }

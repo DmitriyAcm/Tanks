@@ -5,12 +5,14 @@
  */
 package view;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 /**
  *
  * @author dmitr
  */
-public class ColorObject {
+public class ColorObject implements Comparable<ColorObject>{
     private final int _idColor;
     private static ArrayList<String> HaveColor = new ArrayList<>();
     private final static int _numColor = 4;
@@ -38,10 +40,6 @@ public class ColorObject {
     
     private ColorObject(int col)
     {
-        if(CheckColor(col))
-        {
-            throw new NullPointerException("Этот цвет уже выбран");
-        }
         HaveColor.add(Integer.toString(col));
         _idColor = col;
     }
@@ -64,5 +62,49 @@ public class ColorObject {
     public void RemoveColor(int col)
     {
         HaveColor.remove(Integer.toString(col));
+    }
+    
+    @Override
+    public int compareTo(ColorObject obj)
+    {
+        return this._idColor==obj._idColor?1:0;
+    }
+    
+    
+    public static BufferedImage PaintImage(BufferedImage image, ColorObject col)
+    {
+        WritableRaster rast = image.getRaster();
+        
+        for(int i = 0 ; i < rast.getHeight(); ++i)
+        {
+            for(int j = 0; j < rast.getWidth(); ++j)
+            {
+                int pix[] = rast.getPixel(j,i,new int[4]);
+                if(col.compareTo(ColorObject.GetColor(ColorObject.BLACK))==1)
+                {
+                    pix[0]=0;
+                    pix[1]=0;
+                    pix[2]=0;
+                }
+                else if(col.compareTo(ColorObject.GetColor(ColorObject.BLUE))==1)
+                {
+
+                    int buf = pix[1];
+                    pix[1]=pix[2];
+                    pix[2]=buf;
+
+                }
+                else if(col.compareTo(ColorObject.GetColor(ColorObject.RED))==1)
+                {
+                    int buf = pix[1];
+                    pix[1]=pix[0];
+                    pix[0]=buf;
+                }
+                
+                rast.setPixel(j, i, pix);
+            }
+        }
+        image.setData(rast);
+        return image;
     }
 }

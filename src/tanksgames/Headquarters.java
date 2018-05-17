@@ -7,6 +7,7 @@ package tanksgames;
 
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
+import static tanksgames.Tank.namefiles;
 import view.ColorObject;
 
 /**
@@ -27,6 +28,8 @@ public class Headquarters extends DestructibleObject {
     @Override
     public BufferedImage PaintImage()
     {
-        return super.getImage(namefiles);
+        BufferedImage curImage = super.getImage(namefiles);
+        
+        return ColorObject.PaintImage(curImage, _color);
     }
 }

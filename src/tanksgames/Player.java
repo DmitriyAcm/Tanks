@@ -49,4 +49,9 @@ public class Player {
             while(curDir.direct()!=Direction.Up().direct());
         }
     }
+    
+    boolean DecrementStep()
+    {
+        //_numStep
+    }
 }
