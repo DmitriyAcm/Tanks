@@ -81,19 +81,22 @@ public class ShockWave {
                     q.add(newCell);
                     mp.put(newCell, Integer.toString(curDist+1));
                     newCell.DamageCell();
-                    if(mp.get(q.getFirst())==Integer.toString(curDist+1))
-                    {
-                        for(Cell cl : q)
-                        {
-                            curFld.add(cl);
-                        }
-                        InformListener(curFld);
-                        curFld.clear();
-                    }
                 }
                 curDir = curDir.Rotate(Rotation.Right());
             }
             while(curDir.direct()!=Direction.Up().direct());
+            
+            String s1 = (String)mp.get(q.getFirst());
+            String s2 = Integer.toString(curDist+1);
+            if(s1.equals(s2))
+            {
+                for(Cell cl : q)
+                {
+                    curFld.add(cl);
+                }
+                InformListener(curFld);
+                curFld.clear();
+            }
         }
         
         

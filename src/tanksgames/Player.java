@@ -17,7 +17,7 @@ public class Player {
     private final Tank _tank;
     private final Headquarters _head;
     public int _numStep = 0;
-    
+    private GameModel _model;
     
     public Tank tank()
     {
@@ -29,7 +29,12 @@ public class Player {
         return _head;
     }
     
-    Player(GameField field, Cell pos, ColorObject color)
+    public GameModel model()
+    {
+        return _model;
+    }
+    
+    Player(GameField field, Cell pos, ColorObject color, GameModel model)
     {
         _color = color;
         _head = new Headquarters(_color);
@@ -48,10 +53,23 @@ public class Player {
             }
             while(curDir.direct()!=Direction.Up().direct());
         }
+        
+        _model = model;
     }
     
-    boolean DecrementStep()
+    public boolean DecrementStep()
     {
-        //_numStep
+        if(_numStep<=0)
+        {
+            return false;
+        }
+        
+        _numStep--;
+        if(_numStep<=0)
+        {
+            _model.ChangePlayer();
+        }
+        model().InformAboutStep();
+        return true;
     }
 }

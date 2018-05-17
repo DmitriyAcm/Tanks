@@ -16,9 +16,8 @@ import tanksgames.Cell;
 public class FireRuledBulletEvent extends EventObject{
     public Cell _pos;
     
-    public FireRuledBulletEvent(Object source, Cell curPos)
+    public FireRuledBulletEvent(Object source)
     {
         super(source);
-        _pos = curPos;
     }
 }

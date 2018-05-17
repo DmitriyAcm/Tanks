@@ -86,7 +86,7 @@ public class GamePanel extends JFrame implements KeyListener {
         this.setMaximumSize(fieldDimension);
        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+        _model.ChangePlayer();
         fieldPanel.setDoubleBuffered(true);
         createField();
         
@@ -100,7 +100,7 @@ public class GamePanel extends JFrame implements KeyListener {
         ShockWave.AddListener(new GameOverListerner());
         _model.AddListener(new ChangePlayer());
         
-        _model.ChangePlayer();
+        
         
         try
         {
@@ -137,6 +137,7 @@ public class GamePanel extends JFrame implements KeyListener {
                 fieldPanel.add(button);
             }
         }
+        repaintField();
     }
     
     public void repaintField() {
@@ -253,40 +254,31 @@ public class GamePanel extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent ke)
     {
-        if(_model.curPlayer()._numStep<=0)
-            return;
-        
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_A:
                 _model.curPlayer().tank().Rotate(Rotation.Left());
-                _model.curPlayer()._numStep--;
+                _model.curPlayer().DecrementStep();
                 break;
             case KeyEvent.VK_D:
                 _model.curPlayer().tank().Rotate(Rotation.Right());
-                _model.curPlayer()._numStep--;
+                _model.curPlayer().DecrementStep();
                 break;
             case KeyEvent.VK_W:
                 if(_model.curPlayer().tank().Move())
                 {
-                    _model.curPlayer()._numStep--;
+                   _model.curPlayer().DecrementStep();
                 }
                 break;
             case KeyEvent.VK_S:
-                if(_model.curPlayer().tank().Fire(new UnruledBullet(_model.curPlayer().tank()._direct,_model.field())))
-                {
-                    _model.curPlayer()._numStep--;
-                }
+                _model.curPlayer().DecrementStep();
+                _model.curPlayer().tank().Fire(new UnruledBullet(_model.curPlayer().tank()._direct,_model.field()));
+
                 break;
             case KeyEvent.VK_SPACE:
                 _model.PassStep();
                 break;
             default:
                 break;
-        }
-        
-        if(_model.curPlayer()._numStep<=0)
-        {
-            _model.ChangePlayer();
         }
     }
     ///////////////////////////////////

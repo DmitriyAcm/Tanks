@@ -26,7 +26,7 @@ public class RuledBullet extends Bullet{
     
     public RuledBullet(Direction dir, int Lenght,GameField field, Cell to)
     {
-        super(dir,Lenght,field,3);
+        super(dir,Lenght,field,2);
         _to = to;
     }
     

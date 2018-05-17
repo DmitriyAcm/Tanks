@@ -41,12 +41,8 @@ public abstract class Bullet extends DynamicObject {
                 super._direct=dir1;
                 super.moveTo(dir1);
                 Cell curCell = _field.FindCell(this);
+                position=_field.FindCell(this);
                 
-                if(curCell._objects.size()>1 || (curCell._objects.size()>0) && !(curCell._objects.get(0) instanceof Water || curCell._objects.get(0) instanceof Bullet))
-                {
-                    position=_field.FindCell(this);
-                    break;
-                }
                 dir1 = cur.next();
             }
         }

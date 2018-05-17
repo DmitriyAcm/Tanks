@@ -26,7 +26,18 @@ public class UnruledBullet extends Bullet{
     {
         ArrayList<Vector> list = new ArrayList<Vector>();
         
-        list.add(new Vector(_direct));
+        Cell curCell = _field.FindCell(this).nextCell(_direct);
+        
+        while(curCell!=null && !((curCell._objects.size()>1 || (curCell._objects.size()>0) && !(curCell._objects.get(0) instanceof Water || curCell._objects.get(0) instanceof Bullet))))
+        {
+            list.add(new Vector(_direct,1));
+            curCell = curCell.nextCell(_direct);
+        }
+       
+        if(curCell!=null)
+        {
+            list.add(new Vector(_direct,1));
+        }
         
         return list;
     }
