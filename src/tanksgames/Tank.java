@@ -19,15 +19,17 @@ public class Tank extends DynamicObject{
     static String namefiles = "src/tanksgames/Img/Tank/1.png";
     private final int COOLDOWN = 1;
     
-    
     private ColorObject _color;
     public int _cooldown = 0;
     
-    public Tank(Direction dir, GameField field, ColorObject color)
+    private Player _curPlayer = null;
+    
+    public Tank(Direction dir, GameField field, ColorObject color, Player player)
     {
         super(dir,3,field);
         
         _color = color;
+        _curPlayer=player;
     }
     
     private boolean Recharge()
@@ -66,6 +68,13 @@ public class Tank extends DynamicObject{
             _cooldown--;
             return false;
         }
+    }
+
+    @Override
+    public void DamageObject() {
+        super.DamageObject(); //To change body of generated methods, choose Tools | Templates.
+        _field.FindCell(this).DeleteObject(this);
+        _curPlayer.SpawnTank();
     }
     
     @Override

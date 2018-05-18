@@ -18,6 +18,8 @@ public class Player {
     private final Headquarters _head;
     public int _numStep = 0;
     private GameModel _model;
+    private Cell _SpawnPos;
+    
     
     public Tank tank()
     {
@@ -38,23 +40,27 @@ public class Player {
     {
         _color = color;
         _head = new Headquarters(_color);
-        _tank = new Tank(Direction.Down(),field,_color);
-           
-        if(pos.AddObject(_head))
-        {
-            Direction curDir = Direction.Up();
-            do
-            {
-                if(pos.nextCell(curDir)!=null && pos.nextCell(curDir).AddObject(_tank))
-                {
-                    break;
-                }
-                curDir = curDir.Rotate(Rotation.Right());
-            }
-            while(curDir.direct()!=Direction.Up().direct());
-        }
-        
+        _tank = new Tank(Direction.Down(),field,_color,this);
         _model = model;
+        _SpawnPos = pos;
+        if(_SpawnPos.AddObject(_head))
+        {
+            SpawnTank();
+        }
+    }
+    
+    public void SpawnTank()
+    {
+        Direction curDir = Direction.Up();
+        do
+        {
+            if(_SpawnPos.nextCell(curDir)!=null && _SpawnPos.nextCell(curDir).AddObject(_tank))
+            {
+                break;
+            }
+            curDir = curDir.Rotate(Rotation.Right());
+        }
+        while(curDir.direct()!=Direction.Up().direct());
     }
     
     public boolean DecrementStep()
