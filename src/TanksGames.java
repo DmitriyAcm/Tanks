@@ -6,8 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import view.ColorObject;
-import view.ControllView;
+import view.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

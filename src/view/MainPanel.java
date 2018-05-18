@@ -81,14 +81,14 @@ public class MainPanel extends JFrame {
     {
         height = (int)spins[2].getValue();
         weight = (int)spins[3].getValue();
-        lenghtFly = (int)spins[0].getValue();
-        cntStep = (int)spins[1].getValue();
+        lenghtFly = (int)spins[1].getValue();
+        cntStep = (int)spins[0].getValue();
     }
     
     JPanel CreatePanel()
     {
         JPanel p = new JPanel(new SpringLayout());
-        CreateSpinner(p,"Количество жизней",1);
+        CreateSpinner(p,"Количество шагов хода",1);
         CreateSpinner(p,"Дальность полета управляемого снаряда",1);
         CreateSpinner(p,"Высота поля",3);
         CreateSpinner(p,"Ширина поля",3);

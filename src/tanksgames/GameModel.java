@@ -30,7 +30,7 @@ public class GameModel {
         curPlayer()._numStep=0;
         curPlayer^=1;
         curPlayer()._numStep=_begCountStep;
-        
+        InformAboutStep();
     }
     
     public void PassStep()
@@ -67,11 +67,53 @@ public class GameModel {
     {
         Random random = new java.util.Random();
         
+        int curR = 0;
+        
+        for(int i=0;i<field().height();++i)
+        {
+            for(int j=0;j<field().width();++j)
+            {
+                curR = random.nextInt(100)+1;
+                Cell curCell = field().GetCell(new Coordinate(j,i));
+                if(curR>65)
+                {
+                    curCell.AddObject(new Wall());
+                }
+                else if(curR>50)
+                {
+                    curCell.AddObject(new Water());
+                }
+            }
+        }
     }
     
     public GameField field()
     {
         return _field;
+    }
+    
+    public int CompletionGame()
+    {
+        int res = 0;
+        for(int i=0;i<2;++i)
+        {
+            if(field().FindCell(_players[i].head())==null)
+            {
+                res|=i+1;
+            }
+        }
+        if(res==0)
+        {
+            for(int i=0;i<2;++i)
+            {
+                if(field().FindCell(_players[i].tank())==null)
+                {
+                    res|=i+1;
+                }
+            }
+        }
+        
+        return res;
     }
     
     // -- обработка слушателей

@@ -63,7 +63,7 @@ public class RuledBullet extends Bullet{
             {
                 Cell newCell = curCell.nextCell(curDir);
                 
-                if(newCell == _to || newCell != null && (newCell._objects.isEmpty() || !(newCell._objects.get(0) instanceof Water)) && mp.get(newCell)==null)
+                if(newCell == _to || newCell != null && (newCell._objects.isEmpty() || (newCell._objects.get(0) instanceof Water)) && mp.get(newCell)==null)
                 {
                     q.add(newCell);
                     mp.put(newCell, Integer.toString(curDist+1));

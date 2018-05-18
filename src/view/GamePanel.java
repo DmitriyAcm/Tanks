@@ -56,12 +56,7 @@ import tanksgames.RuledBullet;
 public class GamePanel extends JFrame implements KeyListener {
     private JPanel fieldPanel = new JPanel();
     
-    private JPanel infoPanel = new JPanel();
-    private JButton labelInfo = new JButton();
-    private JLabel playerInfo = new JLabel();
-    
-    private JMenuBar menu = null;
-    private final String fileItems[] = new String []{"Exit"};
+    private boolean CurBulletRuledForm = false;
     
     private final int CELL_SIZE = 50;
     private final int TITLE_HEIGHT = 40;
@@ -70,12 +65,17 @@ public class GamePanel extends JFrame implements KeyListener {
     
     private JButton[][] _field;
     
-    private static BufferedImage _bang;
+    private BufferedImage _bang;
+    private BufferedImage _green;
     
-    public GamePanel(GameModel model) {
+    private ActionListener _MenuList = null;
+    
+    public GamePanel(GameModel model, ActionListener MenuListener) {
         super();
             
         _model = model;
+        _MenuList=MenuListener;
+        
         
         this.setTitle("Танчики");
         
@@ -84,7 +84,17 @@ public class GamePanel extends JFrame implements KeyListener {
         this.setPreferredSize(fieldDimension);
         this.setMinimumSize(fieldDimension);
         this.setMaximumSize(fieldDimension);
-       
+        
+        try
+        {
+            _green = ImageIO.read(new File("src/tanksgames/Img/Green/1.png"));
+            _bang = ImageIO.read(new File("src/tanksgames/Img/Bang/1.png"));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _model.ChangePlayer();
         fieldPanel.setDoubleBuffered(true);
@@ -93,23 +103,10 @@ public class GamePanel extends JFrame implements KeyListener {
         
         pack();
         setResizable(false);
-        
-        
         // слушатели
         addKeyListener(this);
         ShockWave.AddListener(new GameOverListerner());
         _model.AddListener(new ChangePlayer());
-        
-        
-        
-        try
-        {
-            _bang = ImageIO.read(new File("src/tanksgames/Img/Bang/1.png"));
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
     }
     
     private void createField(){
@@ -133,6 +130,8 @@ public class GamePanel extends JFrame implements KeyListener {
                 JButton button = new JButton("");
                 
                 _field[row][col] = button;
+                _field[row][col].setFocusable(false);
+                _field[row][col].addActionListener(new ClickListener());
                 
                 fieldPanel.add(button);
             }
@@ -147,6 +146,23 @@ public class GamePanel extends JFrame implements KeyListener {
         {
             for (int col = 0; col < _model.field().width(); col++) 
             {       
+                Cell curCell = _model.field().GetCell(new Coordinate(col, row));     
+                
+                _field[row][col].setIcon(new ImageIcon(GetCellImage(curCell)));     
+            }
+        }
+        fieldPanel.validate();
+        this.add(fieldPanel);
+    }
+    
+    public void RuledBulletMode(boolean mode)
+    {
+        setEnabledField(true);
+        //this.remove(fieldPanel);
+        for (int row = 0; row < _model.field().height(); row++) 
+        {
+            for (int col = 0; col < _model.field().width(); col++) 
+            {       
                 Cell curCell = _model.field().GetCell(new Coordinate(col, row));
                 
                 RuledBullet bul = new RuledBullet(_model.curPlayer().tank()._direct,_model._distRuledBullet,_model.field(),curCell);
@@ -154,28 +170,18 @@ public class GamePanel extends JFrame implements KeyListener {
                 Cell beg = _model.field().FindCell(_model.curPlayer().tank());
                 beg.AddObject(bul);
                 
-                ArrayList f = bul.traectory();
-                boolean fg = f.isEmpty();
-                
-                
-                _field[row][col].setEnabled(!fg || beg==curCell);
-                beg.DeleteObject(bul);
-                
-                _field[row][col].setIcon(new ImageIcon(GetCellImage(curCell)));
-                _field[row][col].setFocusable(false);
-                _field[row][col].addActionListener(new ClickListener());
-                
+                // TODO -- когда будет отрисовка открытой области по нажатиию убрать второе условие
+                _field[row][col].setEnabled(!mode || !bul.traectory().isEmpty() || beg==curCell);
+                beg.DeleteObject(bul);    
             }
         }
         fieldPanel.validate();
         this.add(fieldPanel);
-        
-        
     }
     
     private BufferedImage GetCellImage(Cell curCell)
     {
-        BufferedImage image = WhiteImg();
+        BufferedImage image = Concat(WhiteImg(),_green);
                 
         for(Object obj : curCell._objects)
         {
@@ -188,7 +194,7 @@ public class GamePanel extends JFrame implements KeyListener {
     {
         BufferedImage image = new BufferedImage(CELL_SIZE,CELL_SIZE,BufferedImage.TYPE_INT_RGB);
         WritableRaster rast = image.getRaster();
-
+        
         for(int i=0;i<rast.getHeight();++i)
         {
             for(int j=0;j<rast.getWidth();++j)
@@ -200,7 +206,7 @@ public class GamePanel extends JFrame implements KeyListener {
                 rast.setPixel(j, i, pix);
             }
         }
-
+        
         image.setData(rast);
                 
         return image;
@@ -270,13 +276,16 @@ public class GamePanel extends JFrame implements KeyListener {
                 }
                 break;
             case KeyEvent.VK_S:
-                _model.curPlayer().DecrementStep();
                 _model.curPlayer().tank().Fire(new UnruledBullet(_model.curPlayer().tank()._direct,_model.field()));
+                _model.curPlayer().DecrementStep();           
 
                 break;
             case KeyEvent.VK_SPACE:
                 _model.PassStep();
                 break;
+            case KeyEvent.VK_Z:
+                CurBulletRuledForm^=true;
+                RuledBulletMode(CurBulletRuledForm);
             default:
                 break;
         }
@@ -299,6 +308,21 @@ public class GamePanel extends JFrame implements KeyListener {
         return null;
     }
     
+    private void next1(int GameCode)
+    {
+        this.setEnabled(false);
+        this.setVisible(false);
+        SwingUtilities.invokeLater(new Runnable(){
+
+            @Override
+            public void run()
+            {
+                new EndGamePanel(_MenuList,GameCode);
+            }
+
+        });
+    }
+    
     // ударная волна
     private class GameOverListerner implements ShockWaveListener{
             @Override
@@ -312,6 +336,12 @@ public class GamePanel extends JFrame implements KeyListener {
                     curBut.setIcon(new ImageIcon(Concat(GetCellImage(FindCell(curBut)),_bang)));
                 }
                 add(fieldPanel);
+                
+                int ends = _model.CompletionGame();
+                if(ends!=0)
+                {
+                    next1(ends);
+                }
                 /*try
                 {
                     SwingUtilities.invokeAndWait(new Runnable(){
@@ -364,16 +394,10 @@ public class GamePanel extends JFrame implements KeyListener {
     private class ClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            
-            if(_model.curPlayer().tank().Fire(new RuledBullet(_model.curPlayer().tank().
-                    _direct,_model._distRuledBullet,_model.field(),FindCell((JButton) e.getSource()))))
+            if(CurBulletRuledForm)
             {
-                _model.curPlayer()._numStep--;
-
-                if(_model.curPlayer()._numStep<=0)
-                {
-                    _model.ChangePlayer();
-                }
+                _model.curPlayer().tank().Fire(new RuledBullet(_model.curPlayer().tank(). _direct,_model._distRuledBullet,_model.field(),FindCell((JButton) e.getSource())));
+                _model.curPlayer().DecrementStep();
             }
         }
     }

@@ -82,9 +82,8 @@ public class ColorObject implements Comparable<ColorObject>{
                 int pix[] = rast.getPixel(j,i,new int[4]);
                 if(col.compareTo(ColorObject.GetColor(ColorObject.BLACK))==1)
                 {
-                    pix[0]=0;
-                    pix[1]=0;
-                    pix[2]=0;
+                    pix[0]=pix[1];
+                    pix[2]=pix[1];
                 }
                 else if(col.compareTo(ColorObject.GetColor(ColorObject.BLUE))==1)
                 {

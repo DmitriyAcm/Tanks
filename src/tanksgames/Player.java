@@ -65,11 +65,15 @@ public class Player {
         }
         
         _numStep--;
+        
         if(_numStep<=0)
         {
             _model.ChangePlayer();
         }
-        model().InformAboutStep();
+        else
+        {
+            model().InformAboutStep();
+        }
         return true;
     }
 }

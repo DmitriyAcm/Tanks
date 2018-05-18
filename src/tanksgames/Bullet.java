@@ -24,16 +24,16 @@ public abstract class Bullet extends DynamicObject {
     
     public void Fire()
     {
-        ArrayList<Vector> list = traectory();
+        ArrayList<Vector> track = traectory();
         
-        if(list.isEmpty())
+        if(track.isEmpty())
         {
             throw new NullPointerException("Запуск снаряда по несуществующему пути");
         }
         
         Cell position=null;
         
-        for(Vector cur : list)
+        for(Vector cur : track)
         {
             Direction dir1 = cur.next();
             while(dir1 != null)
