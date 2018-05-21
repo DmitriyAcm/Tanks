@@ -8,6 +8,9 @@ package tanksgames;
 import Coordination.Coordinate;
 import Coordination.Direction;
 import Coordination.Rotation;
+import Listeners.MoveableEvent;
+import Listeners.MoveableListener;
+import java.util.ArrayList;
 
 
 /**
@@ -86,9 +89,13 @@ public class GameField {
     public boolean moveObjectTo(Object obj, Direction dir)
     {
         Cell curCell = FindCell(obj);
+        ArrayList<Cell> ListChargedCell = new ArrayList<>();
+        ListChargedCell.add(curCell);
         if(curCell.CheckObject(obj) && curCell.nextCell(dir)!=null && curCell.nextCell(dir).AddObject(obj))
         {
             curCell.DeleteObject(obj);
+            ListChargedCell.add(curCell.nextCell(dir));
+            InformAboutStep(ListChargedCell);
             return true;
         }
         
@@ -120,5 +127,25 @@ public class GameField {
         return null;
     }
     
+    private ArrayList<MoveableListener> _listeners = new ArrayList<>();
     
+    public void AddListener(MoveableListener listener)
+    {
+        _listeners.add(listener);
+    }
+    
+    public void RemoveListener(MoveableListener listener)
+    {
+        _listeners.remove(listener);
+    }
+    
+    public void InformAboutStep(ArrayList<Cell> ListChargedCell)
+    {
+        
+        MoveableEvent event = new MoveableEvent(this, ListChargedCell);
+        for(MoveableListener i : _listeners)
+        {
+            i.move(event);
+        }
+    }
 }

@@ -7,6 +7,7 @@ package tanksgames;
 import Coordination.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.util.ArrayList;
 import static java.util.Collections.swap;
 import javax.swing.ImageIcon;
 import view.ColorObject;
@@ -41,6 +42,12 @@ public class Tank extends DynamicObject{
     {
         _cooldown--;
         super._direct=super._direct.Rotate(rot);
+        ArrayList<Cell> list = new ArrayList<>();
+        
+        list.add(_field.FindCell(this));
+        
+        _field.InformAboutStep(list);
+        
         return true;
     }
     

@@ -26,10 +26,10 @@ public abstract class Bullet extends DynamicObject {
     {
         ArrayList<Vector> track = traectory();
         
-        if(track.isEmpty())
+        /*if(track.isEmpty())
         {
             throw new NullPointerException("Запуск снаряда по несуществующему пути");
-        }
+        }*/
         
         Cell position=null;
         
