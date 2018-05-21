@@ -6,6 +6,14 @@
 package tanksgames;
 import java.util.ArrayList;
 import Coordination.*;
+import Listeners.FireRuledBulletEvent;
+import Listeners.FireRuledBulletListener;
+import Listeners.ShockWaveEvent;
+import Listeners.ShockWaveListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import javax.swing.Timer;
 
 /**
  *
@@ -22,38 +30,102 @@ public abstract class Bullet extends DynamicObject {
         _Radius = radius; 
     }
     
+    private Timer timer = null;
+    Cell position;
+    ShockWave shock= null;
+    
     public void Fire()
     {
-        ArrayList<Vector> track = traectory();
+        Track track = traectory();
         
         /*if(track.isEmpty())
         {
             throw new NullPointerException("Запуск снаряда по несуществующему пути");
         }*/
         
-        Cell position=null;
+        position=_field.FindCell(this);
+        System.out.println("Paint move");
         
-        for(Vector cur : track)
-        {
-            Direction dir1 = cur.next();
-            while(dir1 != null)
-            {
-                super._direct=dir1;
-                super.moveTo(dir1);
-                Cell curCell = _field.FindCell(this);
-                position=_field.FindCell(this);
+       
                 
-                dir1 = cur.next();
+        timer = new Timer(200, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent f)
+            {
+                Direction dir1 = track.GetVector();
+                if(dir1 != null)
+                {
+                    _direct=dir1;
+                    moveTo(dir1);
+                    position = position.nextCell(dir1);
+                    return;
+                }
+                else if(shock==null)
+                {
+                    shock = new ShockWave(position, _Radius);
+                    return;
+                }
+                
+                ArrayList<Cell> wave = shock.GetFrontWave();
+                
+                if(wave!=null)
+                {
+                    InformAboutFire(wave);
+                }
+                else
+                {
+                    InformAboutPaint();
+                    timer.stop();
+                }
             }
-        }
-        
-        if(position == null)
-        {
-            position = _field.FindCell(this);
-        }
-        
-        new ShockWave(position, _Radius);
+        });
+        timer.start();
     }
     
-    public abstract ArrayList<Vector> traectory();
+    public abstract Track traectory();
+    
+    static private ArrayList<ShockWaveListener> _listeners = new ArrayList<ShockWaveListener>();
+    
+    // -- обработка слушателей
+    public static void AddListener(ShockWaveListener list)
+    {
+        _listeners.add(list);
+    }
+    
+    public static void RemoveListener(ShockWaveListener list)
+    {
+        _listeners.remove(list);
+    }
+    
+    private void InformAboutFire(ArrayList<Cell> obl)
+    {
+        ShockWaveEvent event = new ShockWaveEvent(this,obl);
+        for(ShockWaveListener i : _listeners)
+        {
+            i.ExplosiveBullet(event);
+        }
+    }
+    
+    //
+    
+    static private ArrayList<FireRuledBulletListener> _listenersPainter = new ArrayList<>();
+    
+    public static void AddListener(FireRuledBulletListener list)
+    {
+        _listenersPainter.add(list);
+    }
+    
+    public static void RemoveListener(FireRuledBulletListener list)
+    {
+        _listenersPainter.remove(list);
+    }
+    
+    public void InformAboutPaint()
+    {
+        FireRuledBulletEvent event = new FireRuledBulletEvent(this);
+        for(FireRuledBulletListener i : _listenersPainter)
+        {
+            i.RepaintField(event);
+        }
+    }
 }

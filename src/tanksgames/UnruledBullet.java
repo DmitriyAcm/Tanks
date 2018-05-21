@@ -22,24 +22,24 @@ public class UnruledBullet extends Bullet{
     }
     
     @Override
-    public ArrayList<Vector> traectory()
+    public Track traectory()
     {
-        ArrayList<Vector> list = new ArrayList<Vector>();
+        Track track = new Track();
         
         Cell curCell = _field.FindCell(this).nextCell(_direct);
         
         while(curCell!=null && !((curCell._objects.size()>1 || (curCell._objects.size()>0) && !(curCell._objects.get(0) instanceof Water || curCell._objects.get(0) instanceof Bullet))))
         {
-            list.add(new Vector(_direct,1));
+            track.AddVector(_direct);
             curCell = curCell.nextCell(_direct);
         }
        
         if(curCell!=null)
         {
-            list.add(new Vector(_direct,1));
+            track.AddVector(_direct);
         }
         
-        return list;
+        return track;
     }
     
     @Override

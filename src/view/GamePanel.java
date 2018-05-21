@@ -46,6 +46,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import tanksgames.GameModel;
 import javax.swing.border.Border;
+import tanksgames.Bullet;
 import tanksgames.Cell;
 import tanksgames.ShockWave;
 import tanksgames.UnruledBullet;
@@ -82,7 +83,8 @@ public class GamePanel extends JFrame implements KeyListener {
         _MenuList=MenuListener;
         // слушатели
         addKeyListener(this);
-        ShockWave.AddListener(new GameOverListerner());
+        Bullet.AddListener(new GameOverListerner());
+        Bullet.AddListener(new ChangePlayer());
         _model.AddListener(new ChangePlayer());
         _model.field().AddListener(new PaintMove());
         //
@@ -177,7 +179,7 @@ public class GamePanel extends JFrame implements KeyListener {
                 Cell beg = _model.field().FindCell(_model.curPlayer().tank());
                 beg.AddObject(bul);
                 
-                _field[row][col].setEnabled(!mode || !bul.traectory().isEmpty());
+                _field[row][col].setEnabled(!mode || bul.traectory().GetVector()!=null);
                 beg.DeleteObject(bul);    
             }
         }
@@ -380,29 +382,19 @@ public class GamePanel extends JFrame implements KeyListener {
                 });
         }
     }
-    private Timer timer = null;
+
     private class PaintMove implements MoveableListener {
         @Override
         public void move(MoveableEvent e)
         {
-            System.out.println("Paint move");
-            timer = new Timer(200, new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent f)
-                {
-                    for(Cell cur : e._list)
-                    {
-                        Coordinate coord = _model.field().FindCoord(cur);
+            for(Cell cur : e._list)
+            {
+                Coordinate coord = _model.field().FindCoord(cur);
 
-                        JButton curBut = _field[coord.getY()][coord.getX()];
+                JButton curBut = _field[coord.getY()][coord.getX()];
 
-                        curBut.setIcon(new ImageIcon(GetCellImage(FindCell(curBut))));
-                    }
-                    System.out.println("Paint move");
-                    timer.stop();
-                }
-            });
-            timer.start();
+                curBut.setIcon(new ImageIcon(GetCellImage(FindCell(curBut))));
+            }
         }
     }
 }

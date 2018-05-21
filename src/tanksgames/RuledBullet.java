@@ -7,6 +7,7 @@ package tanksgames;
 
 import Coordination.Direction;
 import Coordination.Rotation;
+import Coordination.Track;
 import Coordination.Vector;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -31,11 +32,11 @@ public class RuledBullet extends Bullet{
     }
     
     @Override
-    public ArrayList<Vector> traectory()
+    public Track traectory()
     {
         _base = _field.FindCell(this);
         
-        ArrayList<Vector> list = new ArrayList<Vector>();
+        Track track = new Track();
         
         LinkedList<Cell> q = new LinkedList<Cell>();
         
@@ -95,7 +96,7 @@ public class RuledBullet extends Bullet{
 
                     if(curDist!= null && Integer.parseInt(curDist)+1 == Integer.parseInt((String)mp.get(curCell)))
                     {       
-                        list.add(new Vector(curDir.Rotate(Rotation.Right()).Rotate(Rotation.Right()),1));
+                        track.AddVector(curDir.Rotate(Rotation.Right()).Rotate(Rotation.Right()));
                         curCell = newCell;
                         break;
                     }
@@ -106,7 +107,9 @@ public class RuledBullet extends Bullet{
             }
         }
         
-        return list;
+        track.Reverse();
+        
+        return track;
     }
     
     @Override

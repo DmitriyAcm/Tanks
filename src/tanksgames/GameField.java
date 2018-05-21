@@ -69,7 +69,7 @@ public class GameField {
         return _height;
     }
     
-    public Cell FindCell(Object obj)
+    public Cell FindCell(final Object obj)
     {      
         for(Cell[] i : _field)
         {

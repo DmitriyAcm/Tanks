@@ -20,7 +20,7 @@ import tanksgames.GameModel;
 public class ControllView extends JFrame{
     
     ///////////////////////////////////////// TODO ОТЛАДКА curWindow = 1
-    private int curWindow = 4;
+    private int curWindow = 1;
     
     MainPanel mains = new MainPanel(new NewMenuListener());
     PlayerPanel player1 = new PlayerPanel(new NewMenuListener(),1);  
@@ -53,9 +53,9 @@ public class ControllView extends JFrame{
                 break;
             case 4:
                 
-                GameModel model = new GameModel(3,10,23,23,ColorObject.GetColor(ColorObject.BLACK),ColorObject.GetColor(ColorObject.BLUE),0,3);
+                //GameModel model = new GameModel(3,10,20,20,ColorObject.GetColor(ColorObject.BLACK),ColorObject.GetColor(ColorObject.BLUE),0,3);
                 
-                //GameModel model = new GameModel(mains.cntStep,mains.lenghtFly,mains.height,mains.weight,player1._col,player2._col,player1._pos,player2._pos);
+                GameModel model = new GameModel(mains.cntStep,mains.lenghtFly,mains.height,mains.weight,player1._col,player2._col,player1._pos,player2._pos);
                 GamePanel game = new GamePanel(model, new NewMenuListener());
                 game.setVisible(true);
                 break;

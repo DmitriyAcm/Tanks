@@ -51,4 +51,10 @@ public class Direction {
     {
         return _dir;
     }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        return this._dir==((Direction)obj)._dir;
+    }
 }

@@ -5,6 +5,8 @@
  */
 package Coordination;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author dmitr
@@ -37,4 +39,21 @@ public class Vector {
             return null;
         }
     }
+    
+    ArrayList<Vector> AddVector(Vector other)
+    {
+        ArrayList<Vector> f = new ArrayList<Vector>();
+        if(!_dir.equals(other._dir))
+        {
+            f.add(this);
+            f.add(other);
+        }
+        else
+        {
+            f.add(new Vector(_dir,_lenght+other._lenght));
+        }
+
+        return f;
+    }
+    
 }

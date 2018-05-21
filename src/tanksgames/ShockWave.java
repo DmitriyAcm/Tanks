@@ -18,31 +18,9 @@ import java.util.HashMap;
  */
 public class ShockWave {
     
-    static private ArrayList<ShockWaveListener> _listeners = new ArrayList<ShockWaveListener>();
-    
-    // -- обработка слушателей
-    public static void AddListener(ShockWaveListener list)
-    {
-        _listeners.add(list);
-    }
-    
-    public static void RemoveListener(ShockWaveListener list)
-    {
-        _listeners.remove(list);
-    }
-    
-    private void InformListener(ArrayList<Cell> obl)
-    {
-        ShockWaveEvent event = new ShockWaveEvent(this,obl);
-        for(ShockWaveListener i : _listeners)
-        {
-            i.ExplosiveBullet(event);
-        }
-    }
-    
+    ArrayList<ArrayList<Cell>> waves = new ArrayList<ArrayList<Cell>>();
     ////////////////////////////////////////////
-    
-    
+
     //TODO тесты 
     ShockWave(Cell pos, int Radius)
     {
@@ -59,8 +37,8 @@ public class ShockWave {
         {
             curFld.add(cl);
         }
-        InformListener(curFld);
-        curFld.clear();
+        waves.add(curFld);
+        curFld = new ArrayList<Cell>();
         while(!q.isEmpty())
         {
             Cell curCell = q.pop();
@@ -94,12 +72,23 @@ public class ShockWave {
                 {
                     curFld.add(cl);
                 }
-                InformListener(curFld);
-                curFld.clear();
+                waves.add(curFld);
+                curFld = new ArrayList<Cell>();
             }
         }
-        
-        
     }
     
+    ArrayList<Cell> GetFrontWave()
+    {
+        if(waves.isEmpty())
+        {
+            return null;
+        }
+        
+        ArrayList<Cell> cur = waves.get(0);
+        
+        waves.remove(0);
+        
+        return cur;
+    }
 }
