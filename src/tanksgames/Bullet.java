@@ -12,8 +12,8 @@ import Listeners.ShockWaveEvent;
 import Listeners.ShockWaveListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
 import javax.swing.Timer;
+import view.GamePanel;
 
 /**
  *
@@ -22,6 +22,8 @@ import javax.swing.Timer;
 public abstract class Bullet extends DynamicObject {
     protected int _LenghtFlight;
     private final int _Radius;
+    static public GamePanel _panel;
+    
     
     Bullet(Direction dir, int lenFly, GameField field, int radius)
     {
@@ -37,7 +39,7 @@ public abstract class Bullet extends DynamicObject {
     public void Fire()
     {
         Track track = traectory();
-        
+        _panel.BulletFly=1;
         /*if(track.isEmpty())
         {
             throw new NullPointerException("Запуск снаряда по несуществующему пути");
@@ -52,6 +54,7 @@ public abstract class Bullet extends DynamicObject {
             @Override
             public void actionPerformed(ActionEvent f)
             {
+                
                 Direction dir1 = track.GetVector();
                 if(dir1 != null)
                 {
@@ -75,6 +78,7 @@ public abstract class Bullet extends DynamicObject {
                 else
                 {
                     InformAboutPaint();
+                    _panel.BulletFly=0;
                     timer.stop();
                 }
             }

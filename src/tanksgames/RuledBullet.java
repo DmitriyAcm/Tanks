@@ -23,11 +23,14 @@ import javax.swing.ImageIcon;
  */
 public class RuledBullet extends Bullet{
     Cell _base,_to;
-    static String namefiles = "src/tanksgames/Img/RuledBullet/1.png";
+    
+    private static String namefiles = "src/tanksgames/Img/RuledBullet/1.png";
+    private static final int RADIUS_EXPLOSE = 3; 
+    
     
     public RuledBullet(Direction dir, int Lenght,GameField field, Cell to)
     {
-        super(dir,Lenght,field,2);
+        super(dir,Lenght,field,RADIUS_EXPLOSE);
         _to = to;
     }
     

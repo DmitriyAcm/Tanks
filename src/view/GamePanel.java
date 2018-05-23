@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
@@ -74,11 +75,11 @@ public class GamePanel extends JFrame implements KeyListener {
     
     private ActionListener _MenuList = null;
     
-    private int NowPainter = 0;
+    public int BulletFly = 0;
     
     public GamePanel(GameModel model, ActionListener MenuListener) {
         super();
-            
+        Bullet._panel = this;
         _model = model;
         _MenuList=MenuListener;
         // слушатели
@@ -263,34 +264,42 @@ public class GamePanel extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent ke)
     {
-        switch (ke.getKeyCode()) {
-            case KeyEvent.VK_A:
-                _model.curPlayer().tank().Rotate(Rotation.Left());
-                _model.curPlayer().DecrementStep();
-                break;
-            case KeyEvent.VK_D:
-                _model.curPlayer().tank().Rotate(Rotation.Right());
-                _model.curPlayer().DecrementStep();
-                break;
-            case KeyEvent.VK_W:
-                if(_model.curPlayer().tank().Move())
-                {
-                   _model.curPlayer().DecrementStep();
-                }
-                break;
-            case KeyEvent.VK_S:
-                _model.curPlayer().tank().Fire(new UnruledBullet(_model.curPlayer().tank()._direct,_model.field()));
-                _model.curPlayer().DecrementStep();           
-
-                break;
-            case KeyEvent.VK_SPACE:
-                _model.PassStep();
-                break;
-            case KeyEvent.VK_Z:
-                CurBulletRuledForm^=true;
-                RuledBulletMode(CurBulletRuledForm);
-            default:
-                break;
+        if(BulletFly==0)
+        {
+            switch (ke.getKeyCode()) {
+                case KeyEvent.VK_A:
+                    _model.curPlayer().tank().Rotate(Rotation.Left());
+                    _model.curPlayer().DecrementStep();
+                    break;
+                case KeyEvent.VK_D:
+                    _model.curPlayer().tank().Rotate(Rotation.Right());
+                    _model.curPlayer().DecrementStep();
+                    break;
+                case KeyEvent.VK_W:
+                    if(_model.curPlayer().tank().Move())
+                    {
+                       _model.curPlayer().DecrementStep();
+                    }
+                    break;
+                case KeyEvent.VK_S:
+                    if(!_model.curPlayer().tank().Recharge())
+                    {
+                        _model.curPlayer().tank().Fire(new UnruledBullet(_model.curPlayer().tank()._direct,_model.field()));
+                        _model.curPlayer().DecrementStep();           
+                    }
+                    break;
+                case KeyEvent.VK_SPACE:
+                    _model.PassStep();
+                    break;
+                case KeyEvent.VK_Z:
+                    if(!_model.curPlayer().tank().Recharge())
+                    {
+                        CurBulletRuledForm^=true;
+                        RuledBulletMode(CurBulletRuledForm);
+                    }
+                default:
+                    break;
+            }
         }
     }
     ///////////////////////////////////
@@ -363,6 +372,7 @@ public class GamePanel extends JFrame implements KeyListener {
             {
                 _model.curPlayer().tank().Fire(new RuledBullet(_model.curPlayer().tank(). _direct,_model._distRuledBullet,_model.field(),FindCell((JButton) e.getSource())));
                 _model.curPlayer().DecrementStep();
+                CurBulletRuledForm=false;
             }
         }
     }

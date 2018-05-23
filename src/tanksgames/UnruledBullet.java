@@ -14,11 +14,13 @@ import java.util.ArrayList;
  * @author dmitr
  */
 public class UnruledBullet extends Bullet{
+    
     static String namefiles = "src/tanksgames/Img/UnruledBullet/1.png";
+    private static final int RADIUS_EXPLOSE = 1;
     
     public UnruledBullet(Direction dir, GameField field)
     {
-        super(dir,(int)1e9,field,1);
+        super(dir,(int)1e9,field,RADIUS_EXPLOSE);
     }
     
     @Override

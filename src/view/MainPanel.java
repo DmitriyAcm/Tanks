@@ -90,8 +90,8 @@ public class MainPanel extends JFrame {
         JPanel p = new JPanel(new SpringLayout());
         CreateSpinner(p,"Количество шагов хода",1);
         CreateSpinner(p,"Дальность полета управляемого снаряда",1);
-        CreateSpinner(p,"Высота поля",3);
-        CreateSpinner(p,"Ширина поля",3);
+        CreateSpinner(p,"Высота поля",5);
+        CreateSpinner(p,"Ширина поля",5);
         
         //Lay out the panel.
         int numPairs = 4;
