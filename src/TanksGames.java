@@ -25,11 +25,7 @@ public class TanksGames {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame app = new ControllView();
-                app.setVisible(false);
-            }
-        });
+        JFrame app = new ControllView();
+        app.setVisible(false);
     }
 }

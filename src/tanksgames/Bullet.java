@@ -47,9 +47,7 @@ public abstract class Bullet extends DynamicObject {
         
         position=_field.FindCell(this);
         System.out.println("Paint move");
-        
-       
-                
+            
         timer = new Timer(200, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent f)

@@ -320,18 +320,13 @@ public class GamePanel extends JFrame implements KeyListener {
         return null;
     }
     
+    private int countEndsWindow = 0;
     private void next1(int GameCode)
     {
         this.setEnabled(false);
         this.setVisible(false);
-        SwingUtilities.invokeLater(new Runnable(){
-
-            @Override
-            public void run()
-            {
-                new EndGamePanel(_MenuList,GameCode);
-            }
-        });
+        countEndsWindow++;
+        new EndGamePanel(_MenuList,GameCode);
     }
     
     private void PrintExplose(ArrayList<Cell> _list)
@@ -350,12 +345,12 @@ public class GamePanel extends JFrame implements KeyListener {
     // ударная волна
     private class GameOverListerner implements ShockWaveListener{
         @Override
-        public void  ExplosiveBullet(ShockWaveEvent e){
+        public void ExplosiveBullet(ShockWaveEvent e){
             
             PrintExplose(e._list);
             
             int ends = _model.CompletionGame();
-            if(ends!=0)
+            if(ends!=0 && countEndsWindow==0)
             {
                 next1(ends);
             }           
@@ -382,14 +377,7 @@ public class GamePanel extends JFrame implements KeyListener {
         @Override
         public void RepaintField(FireRuledBulletEvent e)
         {
-            SwingUtilities.invokeLater(new Runnable(){
-
-                        @Override
-                        public void run()
-                        {
-                            repaintField();
-                        }
-                });
+            repaintField();
         }
     }
 
