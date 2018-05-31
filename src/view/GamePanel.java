@@ -29,7 +29,6 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -86,6 +85,7 @@ public class GamePanel extends JFrame implements KeyListener {
         Bullet._panel = this;
         _model = model;
         _MenuList=MenuListener;
+        
         // слушатели
         addKeyListener(this);
         Bullet.AddListener(new GameOverListerner());

@@ -20,12 +20,12 @@ import tanksgames.GameModel;
 public class ControllView extends JFrame{
     
     ///////////////////////////////////////// TODO ОТЛАДКА curWindow = 1
-    private int curWindow = 1;
+    private int curWindow = 4;
     
     MainPanel mains = new MainPanel(new NewMenuListener());
     PlayerPanel player1 = new PlayerPanel(new NewMenuListener(),1);  
     PlayerPanel player2 = new PlayerPanel(new NewMenuListener(),2);  
-    
+    InfoPanel info = new InfoPanel(new NewMenuListener());
     public ControllView()
     {
         view();
@@ -37,6 +37,8 @@ public class ControllView extends JFrame{
         mains.setVisible(false);
         player1.setVisible(false);
         player2.setVisible(false);
+        info.setVisible(false);
+        
         
         switch (curWindow) {
             case 1:
@@ -52,10 +54,13 @@ public class ControllView extends JFrame{
                 player2.setVisible(true);
                 break;
             case 4:
+                info.setVisible(true);
+                break;
+            case 5:
                 
-                //GameModel model = new GameModel(3,4,20,20,ColorObject.GetColor(ColorObject.GREEN),ColorObject.GetColor(ColorObject.BLUE),0,3);
+                GameModel model = new GameModel(3,4,20,20,ColorObject.GetColor(ColorObject.GREEN),ColorObject.GetColor(ColorObject.BLUE),0,3);
                 
-                GameModel model = new GameModel(mains.cntStep,mains.lenghtFly-1,mains.height,mains.weight,player1._col,player2._col,player1._pos,player2._pos);
+                //GameModel model = new GameModel(mains.cntStep,mains.lenghtFly+1,mains.height,mains.weight,player1._col,player2._col,player1._pos,player2._pos);
                 GamePanel game = new GamePanel(model, new NewMenuListener());
                 game.setVisible(true);
                 break;
