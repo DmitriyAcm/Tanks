@@ -110,11 +110,34 @@ public class GamePanel extends JFrame implements KeyListener {
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fieldPanel.setDoubleBuffered(true);
+        
+        // Создание верхней панели информации
+        createUpMenu();
+        
+        // Создание игрового поля
         createField();
+        
+        
+        
         _model.ChangePlayer();
         
         pack();
         setResizable(false);
+    }
+    
+    private void createUpMenu()
+    {
+        JPanel UpperMenu = new JPanel();
+        
+        // Текущий цвет
+        JPanel ColorPanel = new JPanel();
+        
+        JButton But = new JButton(); 
+        
+        
+        But.setFocusable(false);
+        
+        // Количество оставшихся щагов и перезарядка
     }
     
     private void createField(){
@@ -138,7 +161,6 @@ public class GamePanel extends JFrame implements KeyListener {
                 JButton button = new JButton("");
                 
                 _field[row][col] = button;
-                _field[row][col].setFocusable(false);
                 _field[row][col].addActionListener(new ClickListener());
                 
                 fieldPanel.add(button);
@@ -160,7 +182,9 @@ public class GamePanel extends JFrame implements KeyListener {
             {       
                 Cell curCell = _model.field().GetCell(new Coordinate(col, row));     
                 
-                _field[row][col].setIcon(new ImageIcon(GetCellImage(curCell)));     
+                _field[row][col].setIcon(new ImageIcon(GetCellImage(curCell)));
+                _field[row][col].setFocusable(false);
+                _field[row][col].setBorderPainted(false);
             }
         }
     }
@@ -180,7 +204,12 @@ public class GamePanel extends JFrame implements KeyListener {
                 Cell beg = _model.field().FindCell(_model.curPlayer().tank());
                 beg.AddObject(bul);
                 
-                _field[row][col].setEnabled(!mode || bul.traectory().GetVector()!=null);
+                Boolean Check = !mode || bul.traectory().GetVector()!=null;
+                
+                _field[row][col].setBorderPainted(mode);
+                
+                _field[row][col].setFocusable(!Check);
+                _field[row][col].setEnabled(Check);
                 beg.DeleteObject(bul);    
             }
         }
@@ -335,9 +364,9 @@ public class GamePanel extends JFrame implements KeyListener {
         for(Cell cur : _list)
         {
             Coordinate coord = _model.field().FindCoord(cur);
-
+            
             JButton curBut = _field[coord.getY()][coord.getX()];
-
+            
             curBut.setIcon(new ImageIcon(Concat(GetCellImage(FindCell(curBut)),_bang)));
         }
     }
@@ -358,7 +387,7 @@ public class GamePanel extends JFrame implements KeyListener {
     }
     ///////////////////////////////////
     
-    // Класс слушателя поля
+    // Классы слушателя поля
     // 
     private class ClickListener implements ActionListener {
         @Override
@@ -371,7 +400,6 @@ public class GamePanel extends JFrame implements KeyListener {
             }
         }
     }
-    ///////////////////////////////////
     
     private class ChangePlayer implements FireRuledBulletListener {
         @Override
@@ -395,4 +423,5 @@ public class GamePanel extends JFrame implements KeyListener {
             }
         }
     }
+    ///////////////////////////////////
 }

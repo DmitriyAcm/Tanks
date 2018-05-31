@@ -38,7 +38,7 @@ public class EndGamePanel extends JFrame{
         
         if(CodeGame<3)
         {
-            alignmentPanel.add(new JLabel("Выйграл " + Integer.toString(((CodeGame-1)^1)+1) + " игрок"));
+            alignmentPanel.add(new JLabel("Выиграл " + Integer.toString(((CodeGame-1)^1)+1) + " игрок"));
         }
         else
         {
