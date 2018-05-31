@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  * @author dmitr
  */
 public class Wall extends DestructibleObject{
-    static String namefiles = "src/tanksgames/Img/Wall/1.png";
+    static String namefiles = folder + "Wall/1.png";
     
     public Wall()
     {

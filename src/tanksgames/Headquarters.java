@@ -17,7 +17,7 @@ import view.ColorObject;
 public class Headquarters extends DestructibleObject {
     ColorObject _color;
     
-    static String namefiles = "src/tanksgames/Img/Headquarters/1.png";
+    static String namefiles = folder + "Headquarters/1.png";
     
     public Headquarters(ColorObject col)
     {

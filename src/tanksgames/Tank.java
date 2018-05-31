@@ -17,10 +17,10 @@ import view.ColorObject;
  * @author dmitr
  */
 public class Tank extends DynamicObject{
-    static String namefiles = "src/tanksgames/Img/Tank/1.png";
+    static String namefiles = folder + "Tank/1.png";
     private final int COOLDOWN = 2;
     
-    private ColorObject _color;
+    public ColorObject _color;
     public int _cooldown = 0;
     
     private Player _curPlayer = null;

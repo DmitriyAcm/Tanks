@@ -14,7 +14,8 @@ import javax.imageio.ImageIO;
  * @author dmitr
  */
 abstract public class Object{
-
+    
+    protected static final String folder = "Img/";
     protected BufferedImage getImage(String namefile)
     {
         try

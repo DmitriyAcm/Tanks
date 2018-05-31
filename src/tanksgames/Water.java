@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  * @author dmitr
  */
 public class Water extends NonDestructibleObject{
-    static String namefiles = "src/tanksgames/Img/Water/1.png";
+    static String namefiles = folder + "Water/1.png";
     
     @Override
     public BufferedImage PaintImage()

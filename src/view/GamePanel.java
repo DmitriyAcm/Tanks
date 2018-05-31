@@ -16,6 +16,7 @@ import Listeners.ShockWaveListener;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -53,13 +54,12 @@ import tanksgames.ShockWave;
 import tanksgames.UnruledBullet;
 import tanksgames.Object;
 import tanksgames.RuledBullet;
-
 /**
  *
  * @author dmitr
  */
 public class GamePanel extends JFrame implements KeyListener {
-    private JPanel fieldPanel = new JPanel();
+    private JPanel windowPanel = new JPanel();
     
     private boolean CurBulletRuledForm = false;
     
@@ -72,6 +72,10 @@ public class GamePanel extends JFrame implements KeyListener {
     
     private BufferedImage _bang;
     private BufferedImage _green;
+    private BufferedImage _IconOkey;
+    private BufferedImage _IconCooldown;
+    
+    private static final String folder = "Img/";
     
     private ActionListener _MenuList = null;
     
@@ -92,16 +96,12 @@ public class GamePanel extends JFrame implements KeyListener {
         
         this.setTitle("Танчики");
         
-        Dimension fieldDimension = new Dimension(CELL_SIZE*_model.field().width(), CELL_SIZE*_model.field().height());
-        
-        this.setPreferredSize(fieldDimension);
-        this.setMinimumSize(fieldDimension);
-        this.setMaximumSize(fieldDimension);
-        
         try
         {
-            _green = ImageIO.read(new File("src/tanksgames/Img/Green/1.png"));
-            _bang = ImageIO.read(new File("src/tanksgames/Img/Bang/1.png"));
+            _IconOkey = ImageIO.read(new File(folder + "Okey.png"));
+            _IconCooldown = ImageIO.read(new File(folder + "Сooldown.png"));
+            _green = ImageIO.read(new File(folder + "Green/1.png"));
+            _bang = ImageIO.read(new File(folder + "Bang/1.png"));
         }
         catch(IOException e)
         {
@@ -109,15 +109,14 @@ public class GamePanel extends JFrame implements KeyListener {
         }
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fieldPanel.setDoubleBuffered(true);
         
         // Создание верхней панели информации
-        createUpMenu();
+        windowPanel.add(createUpMenu());
         
         // Создание игрового поля
-        createField();
+        windowPanel.add(createField());
         
-        
+        this.add(windowPanel);
         
         _model.ChangePlayer();
         
@@ -125,22 +124,98 @@ public class GamePanel extends JFrame implements KeyListener {
         setResizable(false);
     }
     
-    private void createUpMenu()
+    private JPanel createUpMenu()
     {
         JPanel UpperMenu = new JPanel();
         
         // Текущий цвет
         JPanel ColorPanel = new JPanel();
         
+        UpperMenu.add(ColorPanel);
+        UpperMenu.setPreferredSize(new Dimension(120,300));
         JButton But = new JButton(); 
         
-        
+        But.setPreferredSize(new Dimension(CELL_SIZE,CELL_SIZE));
         But.setFocusable(false);
+        But.setBorderPainted(false);
+        ColorPanel.add(But);
         
         // Количество оставшихся щагов и перезарядка
+        //Очки хода
+        
+        Font font = new Font("Courier",0,23);
+        
+        JPanel PointPanel = new JPanel();
+        UpperMenu.add(PointPanel);
+        
+        PointPanel.setPreferredSize(new Dimension(100,100));
+        PointPanel.setBorder(BorderFactory.createTitledBorder("Очки хода"));
+        
+        But = new JButton();
+        PointPanel.add(But);
+        
+        
+        But.setPreferredSize(new Dimension(CELL_SIZE,CELL_SIZE));
+        But.setFocusable(false);
+        But.setBorderPainted(false);
+        
+        But.setFont(font);
+        
+        // перезарядка
+        
+        JPanel CooldownPanel = new JPanel();
+        UpperMenu.add(CooldownPanel);
+        
+        CooldownPanel.setPreferredSize(new Dimension(100,100));
+        CooldownPanel.setBorder(BorderFactory.createTitledBorder("Перезарядка"));
+        
+        But = new JButton();
+        CooldownPanel.add(But);
+        
+        But.setPreferredSize(new Dimension(CELL_SIZE,CELL_SIZE));
+        But.setFocusable(false);
+        But.setBorderPainted(false);
+        
+        return UpperMenu;
     }
     
-    private void createField(){
+    private void UpdateColor()
+    {
+        
+        JPanel UpperPanel = (JPanel)windowPanel.getComponent(0);
+        JPanel ColorPanel = (JPanel)UpperPanel.getComponent(0);
+        JPanel PointPanel = (JPanel)UpperPanel.getComponent(1);
+        JPanel CooldownPanel = (JPanel)UpperPanel.getComponent(2);
+        
+        JButton But1 = (JButton)ColorPanel.getComponent(0);
+        JButton But2 = (JButton)PointPanel.getComponent(0);
+        JButton But3 = (JButton)CooldownPanel.getComponent(0);
+        
+        int curPlayer = 0;
+        if(_model._players[1]==_model.curPlayer())
+        {
+            curPlayer = 1;
+        }
+        
+        But1.setBackground(_model.curPlayer().tank()._color.GetColor());
+        
+        UpperPanel.setBorder(BorderFactory.createTitledBorder("Ход "+Integer.toString(curPlayer+1)+"-го игрока"));
+        
+        But2.setText(Integer.toString(_model.curPlayer()._numStep));
+        
+        if(_model.curPlayer().tank().Recharge())
+        {
+            But3.setIcon(new ImageIcon(_IconCooldown));
+        }
+        else
+        {
+            But3.setIcon(new ImageIcon(_IconOkey));
+        }
+    }
+    
+    private JPanel createField(){
+        
+        JPanel fieldPanel = new JPanel();
         
         fieldPanel.setDoubleBuffered(true);
         fieldPanel.setLayout(new GridLayout(_model.field().height(), _model.field().width()));
@@ -167,7 +242,7 @@ public class GamePanel extends JFrame implements KeyListener {
             }
         }
         fieldPanel.validate();
-        this.add(fieldPanel);
+        return fieldPanel;
     }
     
     public void repaintField() {
@@ -207,7 +282,6 @@ public class GamePanel extends JFrame implements KeyListener {
                 Boolean Check = !mode || bul.traectory().GetVector()!=null;
                 
                 _field[row][col].setBorderPainted(mode);
-                
                 _field[row][col].setFocusable(!Check);
                 _field[row][col].setEnabled(Check);
                 beg.DeleteObject(bul);    
@@ -272,8 +346,8 @@ public class GamePanel extends JFrame implements KeyListener {
     
     private void setEnabledField(boolean on){
 
-        Component comp[] = fieldPanel.getComponents();
-        for(Component c : comp)
+        Component comp[] = windowPanel.getComponents();
+        for(Component c : ((JPanel)comp[1]).getComponents())
         {    c.setEnabled(on);   }
     }  
     
@@ -406,6 +480,7 @@ public class GamePanel extends JFrame implements KeyListener {
         public void RepaintField(FireRuledBulletEvent e)
         {
             repaintField();
+            UpdateColor();
         }
     }
 

@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 public class RuledBullet extends Bullet{
     Cell _base,_to;
     
-    private static String namefiles = "src/tanksgames/Img/RuledBullet/1.png";
+    private static String namefiles = folder + "RuledBullet/1.png";
     private static final int RADIUS_EXPLOSE = 3; 
     
     

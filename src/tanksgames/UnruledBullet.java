@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class UnruledBullet extends Bullet{
     
-    static String namefiles = "src/tanksgames/Img/UnruledBullet/1.png";
+    static String namefiles = folder + "UnruledBullet/1.png";
     private static final int RADIUS_EXPLOSE = 1;
     
     public UnruledBullet(Direction dir, GameField field)
